@@ -1,0 +1,99 @@
+{
+  "spritesheets": {
+    "particles": {
+      "flames": [
+        0,
+        0,
+        1522,
+        1724
+      ],
+      "sparkle": [
+        1522,
+        0,
+        691,
+        646
+      ]
+    },
+    "cars/police_cruiser": {
+      "blue_police_light": [
+        0,
+        250,
+        200,
+        600
+      ],
+      "police": [
+        0,
+        0,
+        575,
+        250
+      ],
+      "red_police_light": [
+        200,
+        250,
+        200,
+        600
+      ]
+    }
+  },
+  "cars": {
+    "police_cruiser": {
+      "type": "car",
+      "actors": {
+        "car": {
+          "x": 10,
+          "y": 100,
+          "images": "/sprites/lights"
+        }
+      },
+      "sprites": {
+        "lights": [
+          "fake_red_light",
+          "alt_red_light"
+        ],
+        "complex": {
+          "x": 0,
+          "y": 15,
+          "inner": {
+            "name": "test",
+            "item": [
+              1,
+              2,
+              3
+            ]
+          }
+        }
+      },
+      "compose": [
+        {
+          "type": "sprite",
+          "role": "base",
+          "image": "police"
+        }
+      ]
+    }
+  },
+  "emitters": {
+    "flames": {
+      "type": "emitter",
+      "images": [
+        "//particles/flame_1",
+        "//cars/police_car/base"
+      ]
+    },
+    "sparkle": {
+      "name": "sparkle"
+    }
+  },
+  "animations": {
+    "spin": {
+      "duration": 1000,
+      "keyframes": [
+        {
+          "rotation": {
+            "+": 360
+          }
+        }
+      ]
+    }
+  }
+}
