@@ -20,18 +20,19 @@ async function init() {
 	view.appendChild(app.view);
 
 	// create the animation
-	const animator = new Animator(data, { baseUrl: 'http://localhost:9998/' });
+	const animator = new Animator(data, { baseUrl: '/' });
 	const instance = await animator.create('cars/police_cruiser');
 
 	// attach to the view
-	console.log(instance);
 	app.stage.addChild(instance);
+	instance.x = width / 2;
+	instance.y = height / 2;
 
 	// periodically render
 	function animate() {
 
 		// update
-		// instance.update();
+		instance.update();
 
 		// redraw
 		app.render();

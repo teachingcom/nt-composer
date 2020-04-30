@@ -5,9 +5,12 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "preview": "npx parcel -d ./.dist/ --open -p 9999 ./preview/index.html",
     "compile": "npx babel-node ./compile/index.js",
-    "dev": "concurrently --kill-others \"npm run preview\" \"nodemon -x \\\"npm run compile\\\" -w ./repo -e yml,png,jpg\" \"http-server ./dist -p 9998 --cors\""
+    "preview": "npx babel-node ./preview/server.js",
+    "watch:edit": "npx nodemon -x \"npm run compile\" -w ./resources -e \"yml,png,jpg\"",
+    "launch:browser": "open http://localhost:9999",
+    "dev": "concurrently --kill-others \"npm run preview\" \"npm run watch:edit\"",
+    "start": "npm run launch:browser && npm run dev"
   },
   "author": "",
   "license": "ISC",
@@ -30,6 +33,7 @@
     "http-server": "^0.12.3",
     "nodemon": "^2.0.3",
     "pixi-particles": "^4.2.0",
-    "pixi.js": "^5.2.3"
+    "pixi.js": "^5.2.3",
+    "popmotion": "^8.7.1"
   }
 }

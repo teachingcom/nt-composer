@@ -1,20 +1,24 @@
-import Bundler from 'parcel-bundler';
 import express from 'express';
 import path from 'path';
 
+import Bundler from 'parcel-bundler';
+
+// paths
+const ROOT = path.resolve(path.dirname(''));
+const RESOURCES = path.resolve(`${ROOT}/dist`);
+const ENTRY = path.resolve(`${ROOT}/preview/index.html`);
+
+// create the bundler
+const bundler = new Bundler(ENTRY, {
+	outDir: './.dist'
+});
+
+// create the app
 const app = express();
 
-const ROOT = path.resolve(path.dirname(''));
-const ENTRY = path.resolve(`${ROOT}/preview/index.html`);
-console.log(ENTRY);
-// const file = 'index.html'; // Pass an absolute path to the entrypoint here
-// const options = {}; // See options section of api docs, for the possibilities
+// middlware
+app.use(express.static(RESOURCES));
+app.use(bundler.middleware());
 
-// // Initialize a new bundler using a file and options
-// const bundler = new Bundler(file, options);
-
-// // Let express use the bundler middleware, this will let Parcel handle every request over your express server
-// app.use(bundler.middleware());
-
-// // Listen on port 8080
-// app.listen(9999);
+// start listening
+app.listen(9999);

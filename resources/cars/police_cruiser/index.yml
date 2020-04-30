@@ -1,6 +1,12 @@
 
 type: car
 
+animations:
+  light:
+    duration: 1000
+    keyframes:
+      - rotation: 0
+
 actors:
   car:
     x: 10
@@ -19,11 +25,47 @@ sprites:
       name: test
       item: [1, 2, 3]
 
+animation_time: 5000
+
 compose:
   
   - type: sprite
     role: base
-    image: police
+    images:
+      - police
+
+  # - type: sprite
+  #   animation: /animations/light
+
+  
+  - type: sprite
+    role: base
+    image: red_police_light
+    props:
+      rotation: 0
+      blend: add
+      x: 0
+      y: 0
+      alpha: 0.5
+      scaleY: 2
+      pivotY: 0.5
+
+    animation:
+      duration: 1000
+      keyframes:
+        - rotation: 180
+          scaleY: 1
+          scaleX: 2
+          x: 200
+        - scaleY: 2
+          rotation: 360
+        
+
+  
+  # - type: sprite
+  #   role: base
+  #   image: blue_police_light
+    
   
   # - type: sprite
   #   role: base
