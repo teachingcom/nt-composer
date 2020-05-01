@@ -1,6 +1,33 @@
 
+type: trail
 
-type: emitter
-images: 
-  - //particles/flame_1
-  - //cars/police_car/base
+compose:
+
+  # trail effect
+  - type: emitter
+    image: /particles/crown
+
+    props:
+      x: 0
+      y: 0
+
+    animation:
+      duration: 4000
+      ease: in_out
+      keyframes:
+        - emit.y: 100
+        - emit.y: -100
+
+    emit:
+      y: { rnd: 10 }
+      frequency: 10
+      max: 100
+      scale: [1, 0.25]
+      blend: add
+
+      alpha: [1, 0]
+      speed: [200, 500]
+      life: [1, 2]
+      rotationSpeed: [-200, 720]
+      randomStartRotation: true
+      dir: [175, 185]

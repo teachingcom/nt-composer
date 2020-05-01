@@ -21,7 +21,6 @@ async function compile() {
 	// check for changes
 	const data = { };
 	if (!('spritesheets' in data)) data.spritesheets = { };
-	if (!('cars' in data)) data.cars = { };
 
 	// start generating files
 	await generateResource(data, data, 'emitters', { spritesheetName: 'particles' });
@@ -43,6 +42,12 @@ async function compile() {
 /** generates a resource from each item in a directory */
 async function generateResourcesFromDirectory(root, node, id, options) {
 	const source = path.resolve(`${INPUT_DIR}/${id}`);
+	
+	// if the node is missing, create it
+	if (!node) {
+		node = { };
+		root[id] = node;
+	}
 
 	// doesn't exist yet
 	const exists = await fs.exists(source);

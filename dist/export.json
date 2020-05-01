@@ -1,6 +1,12 @@
 {
   "spritesheets": {
     "particles": {
+      "crown": [
+        1522,
+        646,
+        100,
+        100
+      ],
       "flames": [
         0,
         0,
@@ -35,91 +41,63 @@
       ]
     }
   },
-  "cars": {
-    "police_cruiser": {
-      "type": "car",
-      "animations": {
-        "light": {
-          "duration": 1000,
-          "keyframes": [
-            {
-              "rotation": 0
-            }
-          ]
-        }
-      },
-      "actors": {
-        "car": {
-          "x": 10,
-          "y": 100,
-          "images": "/sprites/lights"
-        }
-      },
-      "sprites": {
-        "lights": [
-          "fake_red_light",
-          "alt_red_light"
-        ],
-        "complex": {
-          "x": 0,
-          "y": 15,
-          "inner": {
-            "name": "test",
-            "item": [
-              1,
-              2,
-              3
-            ]
-          }
-        }
-      },
-      "animation_time": 5000,
-      "compose": [
-        {
-          "type": "sprite",
-          "role": "base",
-          "images": [
-            "police"
-          ]
-        },
-        {
-          "type": "sprite",
-          "role": "base",
-          "image": "red_police_light",
-          "props": {
-            "rotation": 0,
-            "blend": "add",
-            "x": 0,
-            "y": 0,
-            "alpha": 0.5,
-            "scaleY": 2,
-            "pivotY": 0.5
-          },
-          "animation": {
-            "duration": 1000,
-            "keyframes": [
-              {
-                "rotation": 180,
-                "scaleY": 1,
-                "scaleX": 2,
-                "x": 200
-              },
-              {
-                "scaleY": 2,
-                "rotation": 360
-              }
-            ]
-          }
-        }
-      ]
-    }
-  },
   "emitters": {
     "flames": {
-      "type": "emitter",
-      "images": [
-        "//particles/flame_1",
-        "//cars/police_car/base"
+      "type": "trail",
+      "compose": [
+        {
+          "type": "emitter",
+          "image": "/particles/crown",
+          "props": {
+            "x": 0,
+            "y": 0
+          },
+          "animation": {
+            "duration": 4000,
+            "ease": "in_out",
+            "keyframes": [
+              {
+                "emit.y": 100
+              },
+              {
+                "emit.y": -100
+              }
+            ]
+          },
+          "emit": {
+            "y": {
+              "rnd": 10
+            },
+            "frequency": 10,
+            "max": 100,
+            "scale": [
+              1,
+              0.25
+            ],
+            "blend": "add",
+            "alpha": [
+              1,
+              0
+            ],
+            "speed": [
+              200,
+              500
+            ],
+            "life": [
+              1,
+              2
+            ],
+            "rotationSpeed": [
+              -200,
+              720
+            ],
+            "randomStartRotation": true,
+            "dir": [
+              175,
+              185
+            ]
+          }
+        }
       ]
     },
     "sparkle": {
@@ -134,6 +112,73 @@
           "rotation": {
             "+": 360
           }
+        }
+      ]
+    }
+  },
+  "trails": {
+    "flames": {
+      "type": "trail",
+      "compose": [
+        {
+          "type": "emitter",
+          "image": "//particles/crown",
+          "props": {
+            "z": 2,
+            "x": -30,
+            "y": -15
+          },
+          "emit": {
+            "flipParticleY": true,
+            "dir": [
+              170,
+              190
+            ],
+            "speed": [
+              200,
+              400
+            ],
+            "life": [
+              1,
+              1
+            ],
+            "scale": [
+              1,
+              2
+            ],
+            "rect": [
+              20,
+              100,
+              -35
+            ],
+            "freq": 2
+          }
+        },
+        {
+          "type": "sprite",
+          "image": "//particles/crown",
+          "props": {
+            "z": 1,
+            "x": 30,
+            "y": 15
+          }
+        }
+      ]
+    }
+  },
+  "intros": {},
+  "nitros": {},
+  "tracks": {},
+  "cars": {
+    "police_cruiser": {
+      "type": "car",
+      "compose": [
+        {
+          "type": "sprite",
+          "role": "base",
+          "images": [
+            "police"
+          ]
         }
       ]
     }

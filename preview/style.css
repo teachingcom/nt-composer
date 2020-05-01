@@ -1,10 +1,52 @@
 #view {
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	right: 0;
-	bottom: 0;
-	
+	bottom: 0;	
+}
+
+#paths {
+	position: fixed;
+	top: 10px;
+	left: 10px;
+	z-index: 1;
+	background: rgba(0,0,0,0.5);
+	color: white;
+	font-family: monospace;
+	font-size: 13px;
+	padding: 15px;
+}
+
+#msg {
+	transition: opacity 0.3s;
+	border-radius: 3px;
+	position: fixed;
+	bottom: 15px;
+	left: 50%;
+	transform: translate(-50%, 0);
+	padding: 10px 25px;
+	border: 1px solid;
+	z-index: 2;
+	font-family: sans-serif;
+	font-size: 14px;
+	opacity: 0;
+}
+
+#msg.show {
+	opacity: 1;
+}
+
+#msg.error {
+	background: #ff6465;
+	color: #8c3736;
+	border-color: #ad4444;
+}
+
+#msg.success {
+	background: #84d2ab;
+	color: #2a503e;
+	border-color: #64a083;
 }
 
 canvas {
