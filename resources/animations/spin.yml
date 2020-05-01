@@ -1,4 +1,0 @@
-duration: 1000
-keyframes:
-  - rotation:
-      +: 360

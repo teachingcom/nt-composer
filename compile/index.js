@@ -33,7 +33,6 @@ async function compile() {
 	await generateResourcesFromDirectory(data, data.tracks, 'tracks', { });
 	await generateResourcesFromDirectory(data, data.cars, 'cars', { });
 
-	// console.log(generated)
 	const exported = path.resolve(`${OUTPUT_DIR}/export.json`);
 	const generated = JSON.stringify(data, null, 2);
 	await fs.writeFile(exported, generated);
@@ -56,6 +55,15 @@ async function generateResourcesFromDirectory(root, node, id, options) {
 	// gather all sub folders
 	const dirs = await fs.readdir(source);
 	for (const dir of dirs) {
+
+		// make sure it's not a hidden file and
+		// is actually a directory
+		const location = path.resolve(`${source}/${dir}`);
+		const stat = await fs.stat(location);
+		if (!stat.isDirectory() || dir[0] === '.') 
+			continue;
+
+		// create the resource
 		await generateResource(root, node, dir, { nodeId: dir, subdir: id });
 	}
 }
@@ -73,6 +81,7 @@ async function generateResource(root, node, id, options) {
 	if (!exists) return;
 
 	// gather file contents
+	console.log('[generating]', dir);
 	const { images, markup } = await getDirectoryContents(dir, options);
 
 	// copy all YML data

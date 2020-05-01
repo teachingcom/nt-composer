@@ -1,20 +1,7 @@
 import _ from 'lodash';
-
 import fs from 'fs-extra';
 import path from 'path';
 import yml from 'js-yaml';
-
-// /** creates a simple hash from a string */
-// export function hash(str) {
-// 	str = (str || '').toString();
-// 	var hash = 0, i, chr;
-// 	for (i = 0; i < this.length; i++) {
-// 		chr   = this.charCodeAt(i);
-// 		hash  = ((hash << 5) - hash) + chr;
-// 		hash |= 0;
-// 	}
-// 	return hash;
-// }
 
 /** reads a YML file */
 export async function readYml(path) {

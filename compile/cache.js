@@ -16,11 +16,10 @@ export async function init(root) {
 	try {
 		const data = await fs.readFile(location);
 		cache = JSON.parse(data.toString()) || { };
-		console.log('cache is', cache);
 	}
 	// if fails, just create a new cache
 	catch (ex) {
-		console.log('ex', ex);
+		console.error('failed to load cache', ex);
 		cache = { };
 	}
 }

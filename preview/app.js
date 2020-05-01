@@ -78,6 +78,7 @@ async function init() {
 			instances[type].push(instance);
 
 			// add to the container
+			instance.zIndex = 100 + (instance.zIndex || 0);
 			container.addChild(instance);
 		}
 
