@@ -1,0 +1,65 @@
+type: trail
+
+compose: 
+
+  # individual snow flakes
+  - type: emitter
+
+    # this image is a common library particle
+    # in the /particles directory
+    image: //particles/snowflake
+    props:
+      z: 1
+
+    emit:
+      dir: [175, 185]
+      rect: [10, 100]
+      scale: [0.25, 0.1]
+      speed: [300, 700]
+      life: [0.5, 1]
+      alpha: [0, 1, 1, 1, 1, 0]
+      rotation: [-360, 360]
+      color: [0xffffff, 0x004488]
+      freq: 8
+      max: 15
+      blend: add
+      per: 2
+
+  # creates a wide outer aura
+  - type: emitter
+    image: //particles/aura
+    props:
+      z: 3
+    emit:
+      dir: [175, 185]
+      rect: [10, 100]
+      scale: [3, 2]
+      speed: [300, 700]
+      life: [0.5, 1]
+      alpha: [0, 1, 1, 1, 1, 0]
+      rotation: [-360, 360]
+      color: [0x00ffff, 0x0000ff]
+      freq: 8
+      max: 15
+      blend: add
+      per: 2
+  
+  # creates a light flame like blue effect
+  - type: emitter
+    image: //particles/aura
+    props:
+      z: 2
+      x: 10
+    emit:
+      dir: [175, 185]
+      rect: [10, 40]
+      scale: [2, 1]
+      speed: [200, 500]
+      life: [0.75, 1.5]
+      alpha: [0, 1, 1, 1, 1, 0]
+      rotation: [-360, 360]
+      color: [0x0066ff, 0x0000ff]
+      freq: 14
+      max: 30
+      blend: add
+      per: 2

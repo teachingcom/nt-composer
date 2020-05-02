@@ -41,7 +41,7 @@ export async function getDirectoryContents(dir) {
 		if (isDirectory || file[0] === '.') continue;
 
 		// add to the correct group
-		const ref = !!~['.yml'].indexOf(ext) ? markup
+		const ref = !!~['.yml', '.yaml'].indexOf(ext) ? markup
 			: !!~['.jpg', '.png'].indexOf(ext) ? images
 			: null;
 

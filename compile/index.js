@@ -2,8 +2,14 @@ import _ from 'lodash';
 import fs from 'fs-extra';
 import Spritesmith from 'spritesmith';
 import path from 'path';
-import * as cache from './cache.js';
 import { getDirectoryContents, readYml, asyncCallback, fileToKey } from './utils.js';
+
+// export debug versions of assets
+const DEBUG = false;
+
+// implement a cache to check for actual changes
+// to avoid constant spritesheet regeneration
+import * as cache from './cache.js';
 
 // get the root path
 // __dirname does not exist anymore
@@ -23,9 +29,10 @@ async function compile() {
 	if (!('spritesheets' in data)) data.spritesheets = { };
 
 	// start generating files
-	await generateResource(data, data, 'emitters', { spritesheetName: 'particles' });
+	await generateResource(data, data, 'particles', { });
 	await generateResource(data, data, 'animations', { });
-
+	await generateResource(data, data, 'emitters', { });
+	
 	// generate resources that have sub files
 	await generateResourcesFromDirectory(data, data.trails, 'trails', { });
 	await generateResourcesFromDirectory(data, data.intro, 'intros', { });
@@ -33,8 +40,9 @@ async function compile() {
 	await generateResourcesFromDirectory(data, data.tracks, 'tracks', { });
 	await generateResourcesFromDirectory(data, data.cars, 'cars', { });
 
+	// save the completed file
 	const exported = path.resolve(`${OUTPUT_DIR}/export.json`);
-	const generated = JSON.stringify(data, null, 2);
+	const generated = JSON.stringify(data, null, DEBUG ? 2 : null);
 	await fs.writeFile(exported, generated);
 }
 
@@ -85,7 +93,7 @@ async function generateResource(root, node, id, options) {
 	const { images, markup } = await getDirectoryContents(dir, options);
 
 	// copy all YML data
-	const data = node[options.nodeId || id] = { };
+	const data = { };
 	for (const item of markup) {
 		const contents = await readYml(item.path);
 		const key = fileToKey(item.path);
@@ -93,6 +101,11 @@ async function generateResource(root, node, id, options) {
 		// assign the data -- for a default index file, just assign the data
 		if (key === 'index') Object.assign(data, contents);
 		else data[key] = contents;
+	}
+
+	// save the data, if any
+	if (_.some(data)) {
+		node[options.nodeId || id] = data;
 	}
 
 	// generate the spritesheet, if any
