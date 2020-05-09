@@ -6,6 +6,7 @@ import Bundler from 'parcel-bundler';
 // paths
 const ROOT = path.resolve(path.dirname(''));
 const RESOURCES = path.resolve(`${ROOT}/dist`);
+const LEGACY = path.resolve(`${ROOT}/preview/legacy`);
 const ENTRY = path.resolve(`${ROOT}/preview/index.html`);
 
 // create the bundler
@@ -18,6 +19,7 @@ const app = express();
 
 // middlware
 app.use(express.static(RESOURCES));
+app.use(express.static(LEGACY));
 app.use(bundler.middleware());
 
 // start listening

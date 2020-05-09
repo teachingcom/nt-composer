@@ -2,3 +2,4 @@ type: car
 compose:
   - type: sprite
     image: car
+    role: base

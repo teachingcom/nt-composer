@@ -13,10 +13,10 @@ treads:
     dir: [180, 180]
     alpha: [0.7, 0]
     life: [0.7, 0.7]
-    scale: [0.4, 0.4]
+    scale: [0.33, 0.33]
     speed: [600, 600]
-    freq: 24
-    rect: [1, 6]
+    freq: 26
+    rect: [1, 4]
 
     # do not rotate treads
     noRotation: true
@@ -33,7 +33,7 @@ flame:
     color: [0xffffcc, 0xff8800, 0xcc0000]
     alpha: [1, 0]
     life: [0.1, 0.3]
-    scale: [0.5, 1.8]
+    scale: [0.3, 1.4]
     speed: [600, 700]
     blend: add
     freq: 20
@@ -50,22 +50,22 @@ compose:
   - type: emitter
     base: /treads
     props:
-      y: -70
+      y: -50
 
   # bottom tire treads
   - type: emitter
     base: /treads
     props:
-      y: 70
+      y: 50
   
   # top flame
   - type: emitter
     base: /flame
     props:
-      y: -70
+      y: -50
 
   # bottom frame
   - type: emitter
     base: /flame
     props:
-      y: 70
+      y: 50

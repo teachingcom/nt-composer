@@ -1,21 +1,25 @@
+
+// !!!
+// NOTE: something about this version of Babel requires that
+// imported files are ended with .js or .mjs - if you get an
+// error about ERR_MODULE_NOT_FOUND then check that first
+
 import _ from 'lodash';
 import fs from 'fs-extra';
-import Spritesmith from 'spritesmith';
 import path from 'path';
-import { getDirectoryContents, readYml, asyncCallback, fileToKey } from './utils.js';
 
-// export debug versions of assets
-const DEBUG = false;
+// resource generation approaches
+import generateResource from './generate-resource.js';
+import generateResourcesFromDirectory from './generate-resource-from-dir.js';
+
+// check if debugging mode should be used
+const DEBUG = !!~process.argv.indexOf('--debug');
+import { OUTPUT_DIR, INPUT_DIR } from '../paths.js';
 
 // implement a cache to check for actual changes
 // to avoid constant spritesheet regeneration
 import * as cache from './cache.js';
-
-// get the root path
-// __dirname does not exist anymore
-const ROOT_DIR = path.resolve(path.dirname(''));
-const OUTPUT_DIR = path.resolve(`${ROOT_DIR}/dist`);
-const INPUT_DIR = path.resolve(`${ROOT_DIR}/resources`);
+import scanDirectory from './scan-directory.js';
 
 /** handles compiling all resources in the repo folder */
 async function compile() {
@@ -27,111 +31,45 @@ async function compile() {
 	// check for changes
 	const data = { };
 	if (!('spritesheets' in data)) data.spritesheets = { };
+	if (!('tracks' in data)) data.tracks = { };
 
 	// start generating files
 	await generateResource(data, data, 'particles', { });
 	await generateResource(data, data, 'animations', { });
 	await generateResource(data, data, 'emitters', { });
 	
+	// general track doodads?
+	// await generateResourcesFromDirectory(data, data.trails, 'doodads', { });
+
 	// generate resources that have sub files
 	await generateResourcesFromDirectory(data, data.trails, 'trails', { });
 	await generateResourcesFromDirectory(data, data.intro, 'intros', { });
 	await generateResourcesFromDirectory(data, data.nitros, 'nitros', { });
-	await generateResourcesFromDirectory(data, data.tracks, 'tracks', { });
 	await generateResourcesFromDirectory(data, data.cars, 'cars', { });
+
+	// tracks have variations so each directory should
+	// be scanned to see all available types
+	await scanDirectory(`${INPUT_DIR}/tracks`, { }, async (trackName, fullTrackDir) => {
+
+		// save the track node
+		data.tracks[trackName] = { };
+
+		// create all variations
+		await scanDirectory(fullTrackDir, { }, async variant => {
+			data.tracks[trackName][variant] = { };
+
+			// generate a resource per variation
+			await generateResource(data, data.tracks[trackName], variant, { 
+				subdir: `tracks/${trackName}`
+			});
+		});
+	});
 
 	// save the completed file
 	const exported = path.resolve(`${OUTPUT_DIR}/export.json`);
 	const generated = JSON.stringify(data, null, DEBUG ? 2 : null);
+	console.log(`[export] ${exported}`);
 	await fs.writeFile(exported, generated);
-}
-
-/** generates a resource from each item in a directory */
-async function generateResourcesFromDirectory(root, node, id, options) {
-	const source = path.resolve(`${INPUT_DIR}/${id}`);
-	
-	// if the node is missing, create it
-	if (!node) {
-		node = { };
-		root[id] = node;
-	}
-
-	// doesn't exist yet
-	const exists = await fs.exists(source);
-	if (!exists) return;
-
-	// gather all sub folders
-	const dirs = await fs.readdir(source);
-	for (const dir of dirs) {
-
-		// make sure it's not a hidden file and
-		// is actually a directory
-		const location = path.resolve(`${source}/${dir}`);
-		const stat = await fs.stat(location);
-		if (!stat.isDirectory() || dir[0] === '.') 
-			continue;
-
-		// create the resource
-		await generateResource(root, node, dir, { nodeId: dir, subdir: id });
-	}
-}
-
-/** generates a resource item */
-async function generateResource(root, node, id, options) {
-	const hasSubdir = !!options.subdir;
-	const subdir = hasSubdir ? `${options.subdir}/` : '';
-	const dir = path.resolve(`${INPUT_DIR}/${subdir}/${id}`);
-	
-	// if it's missing, don't bother -- this
-	// there's a separate process to remove
-	// files that no longer exist so cleanup is not required
-	const exists = await fs.exists(dir);
-	if (!exists) return;
-
-	// gather file contents
-	console.log('[generating]', dir);
-	const { images, markup } = await getDirectoryContents(dir, options);
-
-	// copy all YML data
-	const data = { };
-	for (const item of markup) {
-		const contents = await readYml(item.path);
-		const key = fileToKey(item.path);
-
-		// assign the data -- for a default index file, just assign the data
-		if (key === 'index') Object.assign(data, contents);
-		else data[key] = contents;
-	}
-
-	// save the data, if any
-	if (_.some(data)) {
-		node[options.nodeId || id] = data;
-	}
-
-	// generate the spritesheet, if any
-	if (_.some(images)) {
-		const src = _.map(images, item => item.path);
-		const { image, coordinates } = await asyncCallback(Spritesmith.run, { src });
-		
-		// convert to a simplified format
-		const sprites = { };
-		for (const file in coordinates) {
-			const bounds = coordinates[file];
-			const name = fileToKey(file);
-			sprites[name] = [bounds.x, bounds.y, bounds.width, bounds.height];
-		}
-
-		// write spritesheet data
-		const spritesheetId = `${subdir}${options.spritesheetName || id}`;
-		root.spritesheets[spritesheetId] = sprites;
-
-		// write the image
-		const file = path.resolve(`${OUTPUT_DIR}/${spritesheetId}.png`);
-		const targetDir = path.dirname(file);
-		await fs.mkdirp(targetDir);
-		await fs.writeFile(file, image, 'binary');
-	}
-
 }
 
 

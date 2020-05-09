@@ -1,0 +1,200 @@
+type: car
+
+shard:
+  type: sprite
+  props:
+    scaleX: 0.5
+    scaleY: 0.5
+    rotation: [rnd, 0, 360]
+  
+  animation:
+    duration: 7000
+    ease: in_out
+
+compose:
+  -
+    type: sprite
+    role: base
+    image: car
+  
+  -
+    type: sprite
+    image: glow
+    role: glow_effect
+    props:
+      blend: add
+    
+    animation:
+      duration: 3000
+      ease: [in_out, linear]
+      keyframes:
+        - alpha: 0
+        - alpha: 1
+  
+  -
+    type: emitter
+    image: //particles/sparkle_1
+    props:
+      x: -100
+
+    emit:
+      blend: add
+      life: [1, 2]
+      color: [0xff3300, 0x550000]
+      scale: [2, 3]
+      alpha: [0, 1, 0.6, 0]
+      rect: [50, 70]
+      rotation: [-200, 200]
+      speed: [10, 200]
+      dir: [180, 180]
+      freq: 10
+  
+  - base: /shard
+    image: shard_1
+    props:
+      rotation: 0
+      x: 0
+      y: -100
+
+    animations:
+
+      -
+        duration: 15000
+        ease: in_out
+        elapsed: [:%, 75]
+        flip: true
+        keyframes:
+          - y: 75
+
+      -
+        duration: 6000
+        ease: in_out
+        flip: true
+        keyframes:
+          - x: -200
+
+      -
+        duration: 6000
+        ease: in_out
+        keyframes:
+          - rotation: [:+, 360]
+  
+  - base: /shard
+    image: shard_2
+    props:
+      rotation: 0
+      x: 0
+      y: -75
+      z: 2
+
+    animations:
+
+      -
+        duration: 12000
+        ease: in_out
+        flip: true
+        elapsed: [:%, 70]
+        keyframes:
+          - y: 125
+
+      -
+        duration: 5000
+        ease: in_out
+        flip: true
+        elapsed: [:%, 70]
+        keyframes:
+          - x: -180
+
+      -
+        duration: 13000
+        ease: linear
+        flip: true
+        keyframes:
+          - rotation: [:+, 360]
+  
+  - base: /shard
+    image: shard_3
+    props:
+      rotation: 0
+      x: -150
+      y: -125
+      z: 2
+
+    animations:
+
+      -
+        duration: 4000
+        ease: in_out
+        flip: true
+        keyframes:
+          - y: 125
+
+      -
+        duration: 9000
+        ease: in_out
+        flip: true
+        keyframes:
+          - x: 30
+
+      -
+        duration: 4000
+        ease: in_out
+        keyframes:
+          - rotation: [:+, 360]
+  
+  - base: /shard
+    image: shard_4
+    props:
+      rotation: 0
+      x: -150
+      y: 125
+      z: 2
+
+    animations:
+
+      -
+        duration: 8000
+        ease: in_out
+        flip: true
+        elapsed: [:%, 80]
+        keyframes:
+          - y: -125
+
+      -
+        duration: 5000
+        ease: in_out
+        flip: true
+        elapsed: [:%, 20]
+        keyframes:
+          - x: 75
+
+      -
+        duration: 2500
+        ease: in_out
+        keyframes:
+          - rotation: [:+, 360]
+
+  -
+    type: emitter
+    images:
+      - shard_1
+      - shard_2
+      - shard_3
+      - shard_4
+
+    props:
+      z: 1
+
+    emit:
+
+      rect: [100, 220]
+      dir: [180, 180]
+      speed: [400, 700]
+      rotation: [-140, 140]
+      life: [0.4, 0.5]
+      scale: [0.4, 0.4]
+      alpha: [0, 1, 1, 1, 1, 0]
+      freq: 4
+      max: 3
+
+
