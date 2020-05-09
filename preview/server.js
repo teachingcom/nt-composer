@@ -1,25 +1,30 @@
 import express from 'express';
 import path from 'path';
+const ROOT = path.resolve(path.dirname(''));
 
+// parcel bundle helper
 import Bundler from 'parcel-bundler';
 
-// paths
-const ROOT = path.resolve(path.dirname(''));
-const RESOURCES = path.resolve(`${ROOT}/dist`);
-const LEGACY = path.resolve(`${ROOT}/preview/legacy`);
-const ENTRY = path.resolve(`${ROOT}/preview/index.html`);
-
-// create the bundler
-const bundler = new Bundler(ENTRY, {
+// create the bundler which is just serving
+// the index html file
+const bundler = new Bundler(`${ROOT}/preview/index.html`, {
 	outDir: './.dist'
 });
 
 // create the app
 const app = express();
 
-// middlware
-app.use(express.static(RESOURCES));
-app.use(express.static(LEGACY));
+// share the root to allow access to node_modules
+// primarily to allow access to source maps
+app.use(express.static(`${ROOT}/`));
+
+// access to compiled assets and spritesheets
+app.use(express.static(`${ROOT}/dist`));
+
+// access to sample resources such as legacy cars, etc
+app.use(express.static(`${ROOT}/preview/legacy`));
+
+// inject parcel bundler
 app.use(bundler.middleware());
 
 // start listening
