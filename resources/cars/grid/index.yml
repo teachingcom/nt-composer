@@ -23,13 +23,17 @@ compose:
     role: glow_effect
     props:
       blend: add
+      alpha: 0
+      x: 5
     
     animation:
       duration: 3000
-      ease: [in_out, linear]
+      ease: linear
       keyframes:
-        - alpha: 0
         - alpha: 1
+          x: 0
+        - alpha: 0
+          x: -5
   
   -
     type: emitter

@@ -17,6 +17,7 @@ const app = express();
 // share the root to allow access to node_modules
 // primarily to allow access to source maps
 app.use(express.static(`${ROOT}/`));
+app.use(express.static(`${ROOT}/node_modules`));
 
 // access to compiled assets and spritesheets
 app.use(express.static(`${ROOT}/dist`));

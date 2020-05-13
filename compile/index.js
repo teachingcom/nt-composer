@@ -46,6 +46,7 @@ async function compile() {
 	await generateResourcesFromDirectory(data, data.intro, 'intros', { });
 	await generateResourcesFromDirectory(data, data.nitros, 'nitros', { });
 	await generateResourcesFromDirectory(data, data.cars, 'cars', { });
+	await generateResourcesFromDirectory(data, data.namecards, 'namecards', { });
 
 	// tracks have variations so each directory should
 	// be scanned to see all available types

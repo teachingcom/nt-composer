@@ -8,8 +8,8 @@ let handleChange;
 
 // grabs the editor area
 const getElement = () => document.querySelector('#paths');
-const getText = () => getElement().innerText;
-const setText = val => getElement().innerText = val;
+export const getText = () => getElement().innerText;
+export const setText = val => getElement().innerText = val;
 
 /** checks if the input is still the default message */
 export function isDefault() {
@@ -49,6 +49,7 @@ export function parse(saveChanges) {
 	const trails = [ ];
 	const nitros = [ ];
 	const tracks = [ ];
+	const namecards = [ ];
 	const comps = [ ];
 
 	// tracking the current car, if any
@@ -94,6 +95,12 @@ export function parse(saveChanges) {
 				else nitros.push(line);
 			}
 
+			// namecards effect
+			else if (/^namecards/.test(line)) {
+				if (car) car.loot.card = line.substr('namecards/'.length);
+				else namecards.push(line);
+			}
+
 			// if there's not any slashes, then it's the
 			// seed value to use
 			else if (!~line.indexOf('/'))
@@ -110,7 +117,7 @@ export function parse(saveChanges) {
 		}
 
 		// return the final object
-		return { seed, cars, tracks, trails, nitros, comps };
+		return { seed, cars, tracks, trails, nitros, namecards, comps };
 		
 	}
 	// couldn't parse the data
@@ -123,5 +130,7 @@ export function parse(saveChanges) {
 export default {
 	isDefault,
 	parse,
-	init
+	init,
+	getText,
+	setText
 };

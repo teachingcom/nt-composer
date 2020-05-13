@@ -1,58 +1,73 @@
 
 type: track
+speed: 0
+tint: 0x6666ff
+
+effects:
+  -
+    attach_to: car
+    side: front
+    compose:
+      - type: emitter
 
 foreground:
   compose:
     - type: emitter
-      image: //particles/smoke
+      image: //particles/rain
       emit:
-        blend: add
         life: [1, 2]
+        blend: screen
         color: [0xffffff, 0x005599]
-        scale: [3, 5]
-        alpha: [0, 0.4, 0]
-        rotation: [-200, 200]
-        speed: [800, 2000]
-        dir: [179, 181]
-        freq: 23
+        scale: [0.5, 0.5]
+        alpha: [1, 0]
+        speed: [1600, 2400]
+        dir: [168, 178]
+        rotationOffset: -90
+        freq: 180
         rect: [100, 900, 500, 0]
 
 # start:
 # end:
 
+actors:
+
+  tire:
+
+    - type: group
+      props:
+        y: -800
+        
+      compose: 
+        - type: sprite
+          image: simple_tire
+          props:
+            tint: 0xff0000
+            scaleX: 0.3
+            scaleY: 0.3
+        
+        - type: sprite
+          image: simple_tire
+          props:
+            tint: 0xffffff
+            x: [:rx, -30, 30]
+            y: -40
+            scaleX: 0.3
+            scaleY: 0.3
+        
+        - type: sprite
+          image: simple_tire
+          props:
+            tint: 0xff0000
+            y: -80
+            x: [:rx, -60, 60]
+            scaleX: 0.3
+            scaleY: 0.3
+
+
 track:
   segments:
 
     - compose:
-
-        - type: sprite
-          image: simple_tire
-          props:
-            tint: 0xff0000
-            y: -800
-            x: 0
-            scaleX: 0.3
-            scaleY: 0.3
-        
-        - type: sprite
-          image: simple_tire
-          props:
-            # z: 100
-            tint: 0xffffff
-            x: [:rx, -30, 30]
-            y: -840
-            # y: [:rx, -800, 800]
-            scaleX: 0.3
-            scaleY: 0.3
-        
-        - type: sprite
-          image: simple_tire
-          props:
-            tint: 0xff0000
-            y: -880
-            x: [:rx, -60, 60]
-            scaleX: 0.3
-            scaleY: 0.3
 
         - type: sprite
           image: road_1

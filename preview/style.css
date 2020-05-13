@@ -49,7 +49,13 @@
 	border-color: #64a083;
 }
 
-canvas {
+#view > canvas {
 	width: 100%;
 	height: 100%;
+}
+
+canvas.debug {
+	position: absolute;
+	top: 15px;
+	right: 15px;
 }
