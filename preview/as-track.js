@@ -43,12 +43,21 @@ export default async function setupAsTrack(target, data) {
 			type: car.type,
 			lane: LANE_PATTERN[data.cars.length - 1][i],
 			hue: car.hue,
-			mods: car.loot
+			mods: car.mods
 		});
 	}
 
+	let speedGain = 0;
+	setTimeout(() => speedGain = 0.01, 7000);
+
+	// handle track updates
+	const update = () => {
+		track.state.maxSpeed = 0.5;
+		track.state.speed += speedGain;
+		track.render();
+	};
+
 	// replace functions to allow 
-	const update = () => track.render();
 	const resize = () => track.resize();
 	return { update, resize };
 

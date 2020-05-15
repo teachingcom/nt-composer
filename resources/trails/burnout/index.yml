@@ -45,18 +45,6 @@ flame:
 
 # trail composition
 compose:
-
-  # top tire treads
-  - type: emitter
-    base: /treads
-    props:
-      y: -50
-
-  # bottom tire treads
-  - type: emitter
-    base: /treads
-    props:
-      y: 50
   
   # top flame
   - type: emitter
@@ -67,5 +55,17 @@ compose:
   # bottom frame
   - type: emitter
     base: /flame
+    props:
+      y: 50
+
+  # top tire treads
+  - type: emitter
+    base: /treads
+    props:
+      y: -50
+
+  # bottom tire treads
+  - type: emitter
+    base: /treads
     props:
       y: 50

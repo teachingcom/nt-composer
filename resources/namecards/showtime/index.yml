@@ -79,63 +79,22 @@ animations:
 compose:
 
   - type: sprite
-    image: marquee
+    image: //images/namecard
+    role: base
+    props:
+      alpha: 0
 
-  - type: group
-    base: /animations/bulb_2
-    props:
-      x: -215
-      y: 120
-  
-  - type: group
-    base: /animations/bulb_1
-    props:
-      x: -215
-      y: 40
+  - type: emitter
+    image: //particles/smoke
+    emit:
+      dir: 270
+      speed: [200, 400]
+      life: [0.5, 0.5]
+      rect: [600, 30, 0, 100]
+      rotation: [-200, 200]
+      alpha: [0, 0.5, 0.5, 0.5, 0]
+      scale: [2, 4]
+      randomStartRotation: true
+      freq: 30
 
-  - type: group
-    base: /animations/bulb_2
-    props:
-      x: -215
-      y: -40
-  
-  - type: group
-    base: /animations/bulb_1
-    props:
-      x: -215
-      y: -120
-  
-  - type: group
-    base: /animations/bulb_2
-    props:
-      x: -135
-      y: -120
-  
-  - type: group
-    base: /animations/bulb_1
-    props:
-      x: -50
-      y: -120
-  
-  - type: group
-    base: /animations/bulb_2
-    props:
-      x: 50
-      y: -120
-  
-  - type: group
-    base: /animations/bulb_1
-    props:
-      x: 135
-      y: -120
-  
-  - type: group
-    base: /animations/bulb_2
-    props:
-      x: 215
-      y: -120
-     
 
-      
-
-      

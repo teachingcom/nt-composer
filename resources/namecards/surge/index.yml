@@ -1,0 +1,47 @@
+type: namecard
+
+compose:
+
+  - type: sprite
+    image: overlay
+    ignoreMask: true
+  
+  - type: emitter
+    images:
+      - energy_1
+      - energy_2
+      - energy_3
+
+    emit:
+      dir: 270
+      speed: 0
+      blend: add
+      life: [0.2, 0.2]
+      alpha: [1, 0]
+      scale: [1, 2]
+      freq: 14
+
+  - type: emitter
+    images: //particles/aura
+
+    emit:
+      dir: 270
+      speed: 0
+      colors: [0x00ccff, 0x0000ff]
+      blend: add
+      life: [0.2, 0.2]
+      alpha: [1, 1, 0]
+      randomStartRotation: true
+      rotation: [-180, 180]
+      scale: [6, 10]
+      rect: [400, 20]
+      freq: 20
+
+  
+  - type: mask
+    width: 580
+    height: 190
+
+  - type: sprite
+    image: bg
+    role: base

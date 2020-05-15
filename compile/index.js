@@ -35,6 +35,7 @@ async function compile() {
 
 	// start generating files
 	await generateResource(data, data, 'particles', { });
+	await generateResource(data, data, 'images', { });
 	await generateResource(data, data, 'animations', { });
 	await generateResource(data, data, 'emitters', { });
 	

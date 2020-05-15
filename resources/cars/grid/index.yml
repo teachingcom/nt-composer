@@ -12,10 +12,6 @@ shard:
     ease: in_out
 
 compose:
-  -
-    type: sprite
-    role: base
-    image: car
   
   -
     type: sprite
@@ -34,11 +30,18 @@ compose:
           x: 0
         - alpha: 0
           x: -5
+
+  -
+    type: sprite
+    role: base
+    image: car
+  
   
   -
     type: emitter
     image: //particles/sparkle_1
     props:
+      z: 1
       x: -100
 
     emit:
@@ -56,6 +59,7 @@ compose:
   - base: /shard
     image: shard_1
     props:
+      z: 2
       rotation: 0
       x: 0
       y: -100

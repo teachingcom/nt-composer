@@ -10,21 +10,21 @@ effects:
     compose:
       - type: emitter
 
-foreground:
-  compose:
-    - type: emitter
-      image: //particles/rain
-      emit:
-        life: [1, 2]
-        blend: screen
-        color: [0xffffff, 0x005599]
-        scale: [0.5, 0.5]
-        alpha: [1, 0]
-        speed: [1600, 2400]
-        dir: [168, 178]
-        rotationOffset: -90
-        freq: 180
-        rect: [100, 900, 500, 0]
+# foreground:
+#   compose:
+#     - type: emitter
+#       image: //particles/rain
+#       emit:
+#         life: [1, 2]
+#         blend: screen
+#         color: [0xffffff, 0x005599]
+#         scale: [0.5, 0.5]
+#         alpha: [1, 0]
+#         speed: [1600, 2400]
+#         dir: [168, 178]
+#         startRotation: -90
+#         freq: 30
+#         rect: [100, 900, 500, 0]
 
 # start:
 # end:
@@ -64,8 +64,100 @@ actors:
             scaleY: 0.3
 
 
+
 track:
-  segments:
+
+  finish:
+
+    - type: sprite
+      image: road_1
+      role: base
+      props:
+        tint: 0x0000ff
+
+    - type: sprite
+      image: road_1
+      role: base
+      props:
+        tint: 0x0000ff
+        x: 600
+
+    - type: sprite
+      image: road_1
+      role: base
+      props:
+        tint: 0x0000ff
+        x: -600
+
+  start:
+
+    - type: emitter
+      images:
+        - //particles/confetti_1
+        - //particles/confetti_2
+        - //particles/confetti_3
+        - //particles/confetti_4
+
+      props:
+        z: 2
+
+      emit:
+        life: [1, 2]
+        scale: [1, 0.4]
+        alpha: [1, 0]
+        speed: [50, 150]
+        rotation: [-360, 360]
+        dir: [120, 95]
+        rect: [1800, 3000]
+        freq: 200
+
+
+    - type: sprite
+      image: road_1
+      role: base
+
+    - type: sprite
+      image: road_2
+      role: base
+      props:
+        x: -600
+
+    - type: sprite
+      image: starting_block
+      role: base
+      props:
+        x: 600
+
+    - type: sprite
+      image: ground_1
+      props:
+        y: -886
+        x: -320
+        scaleX: 2.3
+    
+    - type: sprite
+      image: ground_1
+      props:
+        y: -886
+        x: 320
+        scaleX: 2.3
+    
+    - type: sprite
+      image: ground_1
+      props:
+        y: 886
+        x: -320
+        scaleX: 2.3
+    
+    - type: sprite
+      image: ground_1
+      props:
+        y: 886
+        x: 320
+        scaleX: 2.3
+
+  order: random
+  repeating:
 
     - compose:
 
@@ -76,15 +168,48 @@ track:
         - type: sprite
           image: ground_1
           props:
-            z: -1
-            y: 889
-            scaleX: 1.2
-            rotation: 0
+            y: -886
+            scaleX: 1.175
+        
+        - type: sprite
+          image: ground_1
+          props:
+            y: 886
+            scaleX: 1.175
+
+    - compose:
+
+        - type: sprite
+          image: road_3
+          role: base
 
         - type: sprite
           image: ground_1
           props:
-            z: -1
-            y: -889
-            scaleX: 1.2
-            rotation: 0
+            y: -886
+            scaleX: 1.175
+        
+        - type: sprite
+          image: ground_1
+          props:
+            y: 886
+            scaleX: 1.175
+          
+    - compose:
+
+        - type: sprite
+          image: road_2
+          role: base
+
+        - type: sprite
+          image: ground_1
+          props:
+            y: -886
+            scaleX: 1.175
+
+        - type: sprite
+          image: ground_1
+          props:
+            y: 886
+            scaleX: 1.175
+          

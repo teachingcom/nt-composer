@@ -71,7 +71,7 @@ export function parse(saveChanges) {
 				car = {
 					type: path.substr('cars/'.length),
 					hue: 0|hue,
-					loot: { }
+					mods: { }
 				};
 
 				// add the loot
@@ -80,7 +80,7 @@ export function parse(saveChanges) {
 			
 			// trail types
 			else if (/^trails/.test(line)) {
-				if (car) car.loot.trail = line.substr('trails/'.length);
+				if (car) car.mods.trail = line.substr('trails/'.length);
 				else trails.push(line);
 			}
 
@@ -91,13 +91,13 @@ export function parse(saveChanges) {
 
 			// nitro effect
 			else if (/^nitros/.test(line)) {
-				if (car) car.loot.nitro = line.substr('nitros/'.length);
+				if (car) car.mods.nitro = line.substr('nitros/'.length);
 				else nitros.push(line);
 			}
 
 			// namecards effect
 			else if (/^namecards/.test(line)) {
-				if (car) car.loot.card = line.substr('namecards/'.length);
+				if (car) car.mods.card = line.substr('namecards/'.length);
 				else namecards.push(line);
 			}
 
