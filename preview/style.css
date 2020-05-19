@@ -54,8 +54,10 @@
 	height: 100%;
 }
 
+img.debug,
 canvas.debug {
 	position: absolute;
 	top: 15px;
 	right: 15px;
+	box-shadow: inset 0 0 0 1px red;
 }

@@ -22,6 +22,7 @@ async function init() {
 	// view updating functions
 	let update = () => { };
 	let resize = () => { };
+	let activateNitro = () => { };
 
 	// setup edit handling
 	editor.init(reload);
@@ -37,11 +38,20 @@ async function init() {
 		const setup = await handler(canvas, data);
 		update = setup.update;
 		resize = setup.resize;
+		activateNitro = setup.activateNitro;
 	}
 	
 	
 	// handle resize events
 	window.addEventListener('resize', () => resize());
+
+	// special events
+	window.addEventListener('keyup', event => {
+		switch (event.which) {
+			case 84: activateNitro()
+		}
+	});
+
 
 	// handle track rendering
 	function refresh() {

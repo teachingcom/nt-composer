@@ -5,7 +5,7 @@ import manifest from '../dist/export.json';
 
 // there's probably a fancy math trick
 // to do this but I don't know it
-const LANE_PATTERN = [ [2], [1,3], [0,2,4], [0,1,2,4], [0,1,2,3,4] ];
+const LANE_PATTERN = [ [2], [1,3], [2,0,4], [0,1,3,4], [0,1,2,3,4] ];
 
 // create cars and a track
 export default async function setupAsTrack(target, data) {
@@ -25,7 +25,7 @@ export default async function setupAsTrack(target, data) {
 		const parts = path.split(/\//g);
 		const [__, trackId, variantId] = parts;
 		const src = track.animator.lookup(path);
-		const seed = src.seed || data.seed || `${+new Date}`;
+		const seed = src.seed || data.seed || 'nitro';
 		
 		// initalize these values
 		await track.setTrack({ seed, trackId, variantId })
@@ -59,6 +59,10 @@ export default async function setupAsTrack(target, data) {
 
 	// replace functions to allow 
 	const resize = () => track.resize();
-	return { update, resize };
+	const activateNitro = () => {
+		track.activateNitro(0);
+	};
+
+	return { update, resize, activateNitro };
 
 }

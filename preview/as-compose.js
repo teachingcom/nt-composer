@@ -27,6 +27,7 @@ export default async function setupAsCompose(target, data) {
 	// handle resizing
 	const update = () => view.render();
 	const resize = () => view.resize();
+	const activateNitro = () => view.activateNitro();
 
-	return { update, resize };
+	return { update, resize, activateNitro };
 }
