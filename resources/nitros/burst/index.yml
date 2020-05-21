@@ -1,0 +1,38 @@
+type: nitro
+
+compose:
+
+  - type: emitter
+    image: burst
+    props:
+      z: 1
+    
+    emit:
+      freq: 15
+      life: 0.4
+      color: [0xffffff, 0xff00ff]
+      rotation: [ -360, 360 ]
+      scale: [ 0.8, 1.1, 0.3 ]
+      alpha: [ 1, 1, 1, 1, 0 ]
+      blend: add
+      startRotation: [0, 360]
+
+  - type: emitter
+    image: beam
+
+
+    props:
+      # x: -500
+      emit.y: [:rnd, -30, 30, var]
+      pivot.x: 250
+      z: -1
+
+    emit:
+      freq: 15
+      life: 1
+      speed: [100, 500]
+      # scale: [1]
+      dir: [180, 180]
+      flipX: true
+      alpha: [ 0, 1, 1, 0 ]
+      blend: add
