@@ -1,0 +1,150 @@
+type: car
+
+compose:
+
+  - type: sprite
+    images:
+      - tail_1
+      - tail_2
+      - tail_3
+      - tail_2
+      - tail_1
+      - tail_4
+      - tail_5
+      - tail_4
+
+    props:
+      scaleX: 0.65
+      scaleY: 0.65
+      x: -310
+      fps: 13
+
+  - type: sprite
+    image: head
+    props:
+      x: 50
+
+    animation:
+      duration: 10000
+      ease: inOut
+      keyframes:
+        - rotation: 60
+          y: 0
+          x: 45
+          scaleX: 1
+          scaleY: 1
+        - rotation: 60
+          y: 0
+          x: 45
+          scaleX: 1
+          scaleY: 1
+        - rotation: 0
+          y: 0
+          x: 45
+          scaleX: 1
+          scaleY: 1
+        - rotation: 0
+          y: -10
+          x: 70
+          scaleX: 0.95
+          scaleY: 0.95
+        - rotation: 0
+          y: 10
+          x: 70
+          scaleX: 0.95
+          scaleY: 0.95
+        - rotation: 0
+          y: -8
+          x: 70
+          scaleX: 0.95
+          scaleY: 0.95
+        - rotation: 0
+          y: 13
+          x: 70
+          scaleX: 0.95
+          scaleY: 0.95
+        - rotation: 0
+          y: -3
+          x: 70
+          scaleX: 0.95
+          scaleY: 0.95
+        - rotation: -60
+          y: 0
+          x: 45
+          scaleX: 1
+          scaleY: 1
+        - rotation: -60
+          y: 0
+          x: 45
+          scaleX: 1
+          scaleY: 1
+        - rotation: 0
+          y: 0
+          x: 45
+          scaleX: 1
+          scaleY: 1
+        
+
+  - type: sprite
+    image: shadow
+    role: base
+    props:
+      x: 45
+
+  - type: sprite
+    image: base
+    role: base
+
+  - type: sprite
+    images:
+      - tire_1
+      - tire_2
+
+    props:
+      rotation: -90
+      scaleX: 0.5
+      scaleY: 0.5
+      y: -100
+      x: -103
+      fps: 16
+
+  - type: sprite
+    images:
+      - tire_1
+      - tire_2
+
+    props:
+      rotation: -90
+      scaleX: 0.5
+      scaleY: 0.5
+      y: 100
+      x: -103
+      fps: 16
+
+  - type: sprite
+    images:
+      - tire_1
+      - tire_2
+
+    props:
+      rotation: -90
+      scaleX: 0.4
+      scaleY: 0.4
+      y: -80
+      x: 120
+      fps: 16
+
+  - type: sprite
+    images:
+      - tire_1
+      - tire_2
+
+    props:
+      rotation: -90
+      scaleX: 0.4
+      scaleY: 0.4
+      y: 80
+      x: 120
+      fps: 16
+      
+    

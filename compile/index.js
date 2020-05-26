@@ -9,6 +9,7 @@ import fs from 'fs-extra';
 import path from 'path';
 
 // resource generation approaches
+import * as cache from './cache.js';
 import generateResource from './generate-resource.js';
 import generateResourcesFromDirectory from './generate-resource-from-dir.js';
 import scanDirectory from './scan-directory.js';
@@ -19,6 +20,10 @@ import { OUTPUT_DIR, INPUT_DIR } from '../paths.js';
 
 /** handles compiling all resources in the repo folder */
 async function compile() {
+	const exported = path.resolve(`${OUTPUT_DIR}/export.json`);
+
+	// load the previous document into the cache
+	await cache.load(exported);
 
 	// ensure directories
 	await fs.mkdirp(OUTPUT_DIR);
@@ -62,7 +67,6 @@ async function compile() {
 	});
 
 	// save the completed file
-	const exported = path.resolve(`${OUTPUT_DIR}/export.json`);
 	const generated = JSON.stringify(data, null, DEBUG ? 2 : null);
 	console.log(`[export] ${exported}`);
 	await fs.writeFile(exported, generated);

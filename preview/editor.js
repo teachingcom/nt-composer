@@ -35,6 +35,7 @@ export function init(onChange) {
 	paths.addEventListener('blur', commit);
 	paths.addEventListener('keydown', function(event) {
 		if (event.shiftKey && event.keyCode === 13) this.blur();
+		event.stopPropagation();
 	});
 
 	// try and load initial data, if possible

@@ -19,6 +19,9 @@ const app = express();
 app.use(express.static(`${ROOT}/`));
 app.use(express.static(`${ROOT}/node_modules`));
 
+// access to non-compiled assets
+app.use(express.static(`${ROOT}/public`));
+
 // access to compiled assets and spritesheets
 app.use(express.static(`${ROOT}/dist`));
 

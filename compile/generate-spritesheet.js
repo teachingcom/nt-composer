@@ -6,6 +6,9 @@ import Spritesmith from 'spritesmith';
 import { fileToKey, asyncCallback } from './utils.js';
 import { OUTPUT_DIR } from '../paths.js';
 
+// access to the previous cache
+import * as cache from './cache.js';
+
 /** handles attempting to create a new spritesheet */
 export async function generateSpritesheet(spritesheets, nodeId, spritesheetName, subdir, images) {
 	const spritesheetId = `${subdir}${spritesheetName || nodeId}`;
@@ -28,9 +31,18 @@ export async function generateSpritesheet(spritesheets, nodeId, spritesheetName,
 	for (const item of images) {
 		expired = expired || item.lastModified > lastGenerated;
 	}
+
+	// check and make sure the prior data is available
+	const existing = _.get(cache.data, 'spritesheets', { })[spritesheetId];
 	
-	// if not expired, nothing to do
-	if (!expired) return;
+	// if it's not expired and we have the old info then
+	// we can just reuse it
+	if (!expired && existing) {
+		spritesheets[spritesheetId] = existing;
+		return;
+	}
+
+	// expired or missing - generate it now
 	console.log('[spritesheet]', spritesheetId);
 	
 	// convert to a spritesheet

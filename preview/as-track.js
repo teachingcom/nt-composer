@@ -48,7 +48,7 @@ export default async function setupAsTrack(target, data) {
 	}
 
 	let speedGain = 0;
-	setTimeout(() => speedGain = 0.01, 7000);
+	setTimeout(() => speedGain = 0.01, 3000);
 
 	// handle track updates
 	const update = () => {
