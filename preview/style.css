@@ -16,6 +16,12 @@
 	font-family: monospace;
 	font-size: 13px;
 	padding: 15px;
+	opacity: 0.1;
+	transition: opacity 0.3s;
+}
+
+#paths:hover, #paths:focus {
+	opacity: 1;
 }
 
 #msg {

@@ -85,16 +85,34 @@ compose:
       alpha: 0
 
   - type: emitter
+    images:
+      - //particles/sparkle_1
+      - //particles/sparkle_2
+    
+    emit:
+      dir: 270
+      speed: [35, 60]
+      colors: [0xffffff, 0xff00ff]
+      blend: add
+      life: [1, 1]
+      rect: [700, 140, 0, 30]
+      rotation: [-360, 360]
+      alpha: [0, 1, 0]
+      scale: [1, 2, 0.3]
+      randomStartRotation: true
+      freq: 18
+
+  - type: emitter
     image: //particles/smoke
     emit:
       dir: 270
+      color: [0x00ff00, 0xffffff]
+      blend: subtract
       speed: [200, 400]
       life: [0.5, 0.5]
       rect: [600, 30, 0, 100]
       rotation: [-200, 200]
-      alpha: [0, 0.5, 0.5, 0.5, 0]
+      alpha: [0, 0.5, 0.5, 0.3, 0]
       scale: [2, 4]
       randomStartRotation: true
       freq: 30
-
-

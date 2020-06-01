@@ -1,4 +1,5 @@
 type: car
+dark: true
 
 shard:
   type: sprite

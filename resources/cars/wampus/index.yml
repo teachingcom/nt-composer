@@ -1,5 +1,8 @@
 type: car
 
+positions:
+  back: -100
+
 compose:
 
   - type: sprite
@@ -96,6 +99,7 @@ compose:
     role: base
 
   - type: sprite
+    role: shadow
     images:
       - tire_1
       - tire_2
@@ -109,6 +113,7 @@ compose:
       fps: 16
 
   - type: sprite
+    role: shadow
     images:
       - tire_1
       - tire_2
@@ -122,6 +127,7 @@ compose:
       fps: 16
 
   - type: sprite
+    role: shadow
     images:
       - tire_1
       - tire_2
@@ -135,6 +141,7 @@ compose:
       fps: 16
 
   - type: sprite
+    role: shadow
     images:
       - tire_1
       - tire_2

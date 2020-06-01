@@ -17,6 +17,7 @@ import scanDirectory from './scan-directory.js';
 // check if debugging mode should be used
 const DEBUG = !!~process.argv.indexOf('--debug');
 import { OUTPUT_DIR, INPUT_DIR } from '../paths.js';
+import { compileProgressPath } from './compile-progress-path.js';
 
 /** handles compiling all resources in the repo folder */
 async function compile() {
@@ -65,6 +66,9 @@ async function compile() {
 			});
 		});
 	});
+
+	// compile the path progress helper
+	data.progress = await compileProgressPath();
 
 	// save the completed file
 	const generated = JSON.stringify(data, null, DEBUG ? 2 : null);

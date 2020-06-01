@@ -71,28 +71,6 @@ track:
 
   finish:
 
-    - type: sprite
-      image: road_1
-      role: base
-      props:
-        tint: 0x0000ff
-
-    - type: sprite
-      image: road_1
-      role: base
-      props:
-        tint: 0x0000ff
-        x: 600
-
-    - type: sprite
-      image: road_1
-      role: base
-      props:
-        tint: 0x0000ff
-        x: -600
-
-  start:
-
     - type: emitter
       images:
         - //particles/confetti_1
@@ -110,9 +88,29 @@ track:
         speed: [50, 150]
         rotation: [-360, 360]
         dir: [120, 95]
-        rect: [1800, 3000]
+        rect: [4000, 2000, 1000]
         freq: 200
+    
 
+    - type: sprite
+      image: road_1
+      role: base
+      props:
+        tint: 0xccffff
+        x: 600
+
+    - type: sprite
+      image: starting_block
+      role: base
+
+    - type: sprite
+      image: road_1
+      role: base
+      props:
+        tint: 0xccffff
+        x: -600
+
+  start:
 
     - type: sprite
       image: road_1
