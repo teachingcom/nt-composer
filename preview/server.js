@@ -8,7 +8,9 @@ import Bundler from 'parcel-bundler';
 // create the bundler which is just serving
 // the index html file
 const bundler = new Bundler(`${ROOT}/preview/index.html`, {
-	outDir: './.dist'
+	outDir: './.dist',
+	sourceMaps: true,
+	cache: false
 });
 
 // create the app

@@ -48,7 +48,7 @@ compose:
         - scaleY: 1.7
           scaleX: 1.7
         - scaleY: 0.9
-    
+  
   - type: emitter
     image: bar
     props:

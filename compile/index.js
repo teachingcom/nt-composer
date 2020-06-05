@@ -40,6 +40,7 @@ async function compile() {
 	await generateResource(data, data, 'images', { });
 	await generateResource(data, data, 'animations', { });
 	await generateResource(data, data, 'emitters', { });
+	await generateResource(data, data, 'crowd', { });
 	
 	// generate resources that have sub files
 	await generateResourcesFromDirectory(data, data.trails, 'trails', { });
@@ -47,7 +48,7 @@ async function compile() {
 	await generateResourcesFromDirectory(data, data.nitros, 'nitros', { });
 	await generateResourcesFromDirectory(data, data.cars, 'cars', { });
 	await generateResourcesFromDirectory(data, data.namecards, 'namecards', { });
-	await generateResourcesFromDirectory(data, data.namecards, 'extras', { });
+	await generateResourcesFromDirectory(data, data.extras, 'extras', { });
 
 	// tracks have variations so each directory should
 	// be scanned to see all available types
@@ -69,6 +70,10 @@ async function compile() {
 
 	// compile the path progress helper
 	data.progress = await compileProgressPath();
+
+	// include animation data
+	const animations = await fs.readFile(`${INPUT_DIR}/crowd/animations.json`);
+	data.crowd = JSON.parse(animations.toString());
 
 	// save the completed file
 	const generated = JSON.stringify(data, null, DEBUG ? 2 : null);

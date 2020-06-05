@@ -65,7 +65,81 @@ actors:
             scaleX: 0.3
             scaleY: 0.3
 
+crowd:
+  compose:
 
+    - type: repeater
+      marginX: 0
+      marginY: 0
+      repeatX: 12
+      repeatY: 1
+
+      compose: 
+        - type: crowd
+          animation: [cheer, jump, clap, wave]
+          actor: man_2
+
+    - type: repeater
+      marginX: 0
+      marginY: 0
+      repeatX: 12
+      repeatY: 1
+      props:
+
+      compose: 
+        - type: crowd
+          animation: [cheer, jump, clap, wave]
+          actor: man_2
+          props:
+            y: -60
+            x: 20
+
+    - type: repeater
+      marginX: 0
+      marginY: 0
+      repeatX: 12
+      repeatY: 1
+      props:
+
+      compose: 
+        - type: crowd
+          animation: [cheer, jump, clap, wave]
+          actor: man_2
+          props:
+            y: -120
+            x: -20
+
+    # - type: crowd
+    #   animation: cheer
+    #   actor: man_2
+    
+    # - type: crowd
+    #   animation: wave
+    #   actor: man_2
+    
+    # - type: crowd
+    #   animation: clap
+    #   actor: man_2
+    
+    # - type: crowd
+    #   animation: jump
+      # actor: man_2
+
+    # - type: crowd
+    #   animation: cheer
+    #   actor: man_1
+    #   scale: 0.5
+    #   props:
+    #     x: 390
+    #     y: -560
+
+    # - type: crowd
+    #   animation: cheer
+    #   actor: man_1
+    #   scale: 2
+    #   props:
+    #     x: 430
+    #     y: -590
 
 track:
 
@@ -97,7 +171,7 @@ track:
       role: base
       props:
         tint: 0xccffff
-        x: 600
+        x: 460
 
     - type: sprite
       image: starting_block
@@ -108,55 +182,85 @@ track:
       role: base
       props:
         tint: 0xccffff
-        x: -600
+        x: -460
 
   start:
+
+    - type: group
+      base: /crowd
+      props:
+        x: 100
+
+    # - type: group
+    #   base: /crowd
+    #   props:
+    #     x: 300
+
+    # - type: group
+    #   base: /crowd
+    #   props:
+    #     x: -100
+
+    # - type: group
+    #   base: /crowd
+    #   props:
+    #     x: 200
+    #     y: -80
+
+    # - type: group
+    #   base: /crowd
+    #   props:
+    #     x: 0
+    #     y: -80
+
 
     - type: sprite
       image: road_1
       role: base
-
-    - type: sprite
-      image: road_2
-      role: base
       props:
-        x: -600
+        tint: 0xff0000
 
-    - type: sprite
-      image: starting_block
-      role: base
-      props:
-        x: 600
+    # - type: sprite
+    #   image: road_1
+    #   role: base
+    #   props:
+    #     x: -460
 
-    - type: sprite
-      image: ground_1
-      props:
-        y: -886
-        x: -320
-        scaleX: 2.3
+    # - type: sprite
+    #   image: starting_block
+    #   role: base
+    #   props:
+    #     x: 460
+
+    # - type: sprite
+    #   image: ground_1
+    #   props:
+    #     y: -886
+    #     x: -320
+    #     scaleX: 2.3
     
-    - type: sprite
-      image: ground_1
-      props:
-        y: -886
-        x: 320
-        scaleX: 2.3
+    # - type: sprite
+    #   image: ground_1
+    #   props:
+    #     y: -886
+    #     x: 320
+    #     scaleX: 2.3
     
-    - type: sprite
-      image: ground_1
-      props:
-        y: 886
-        x: -320
-        scaleX: 2.3
+    # - type: sprite
+    #   image: ground_1
+    #   props:
+    #     y: 886
+    #     x: -320
+    #     scaleX: 2.3
     
-    - type: sprite
-      image: ground_1
-      props:
-        y: 886
-        x: 320
-        scaleX: 2.3
+    # - type: sprite
+    #   image: ground_1
+    #   props:
+    #     y: 886
+    #     x: 320
+    #     scaleX: 2.3
 
-  order: random
+  order: [1]
   repeating:
 
     - compose:
@@ -166,50 +270,133 @@ track:
           role: base
 
         - type: sprite
-          image: ground_1
+          image: grass
           props:
-            y: -886
-            scaleX: 1.175
-        
+            y: -365
+            pivot.y: 1
+
         - type: sprite
-          image: ground_1
+          image: grass
           props:
-            y: 886
-            scaleX: 1.175
+            y: 365
+            pivot.y: 0
+
+        - type: sprite
+          image: grass_overlap
+          props:
+            z: 1
+            y: -365
+            pivot.y: 0
+
+        - type: sprite
+          image: grass_overlap
+          props:
+            z: 1
+            y: 365
+            pivot.y: 0
+            scale.y: -1
 
     - compose:
 
-        - type: sprite
-          image: road_3
-          role: base
+        # - type: sprite
+        #   image: barrier_repeat
+        #   role: bounds
+        #   props:
+        #     y: -365
+        #     pivot.y: 1
 
-        - type: sprite
-          image: ground_1
-          props:
-            y: -886
-            scaleX: 1.175
-        
-        - type: sprite
-          image: ground_1
-          props:
-            y: 886
-            scaleX: 1.175
+        - type: repeater
+          cols: 2
+          rows: 1
+
+          compose:
+            - type: sprite
+              image: barrier_repeat
+              role: bounds
+              props:
+                y: -360
+                pivot.y: 1
+            
+            - type: sprite
+              image: grass
+              role: bounds
+              props:
+                y: -365
+                pivot.y: 1
+            
+            - type: sprite
+              image: barrier_repeat
+              role: bounds
+              props:
+                y: 360
+                pivot.y: 1
+                scale.y: -1
+
           
-    - compose:
-
-        - type: sprite
-          image: road_2
+        - type: repeater
+          cols: 2
+          rows: 1
           role: base
 
-        - type: sprite
-          image: ground_1
-          props:
-            y: -886
-            scaleX: 1.175
+          compose: 
+            - type: sprite
+              image: road_1
+              role: bounds
+              # props:
+                # y: -365
+                # z: 1
 
-        - type: sprite
-          image: ground_1
-          props:
-            y: 886
-            scaleX: 1.175
+
+        # - type: repeater
+        #   cols: 5
+        #   rows: 1
+        #   compose: 
+
+        #     - type: sprite
+        #       image: road_1
+        #       role: base
+
+
+        
+        # - type: sprite
+        #   image: ground_1
+        #   props:
+        #     y: 886
+        #     scaleX: 1.175
+
+    # - compose:
+
+    #     - type: sprite
+    #       image: road_1
+    #       role: base
+
+    #     - type: sprite
+    #       image: ground_1
+    #       props:
+    #         y: -886
+    #         scaleX: 1.175
+        
+    #     - type: sprite
+    #       image: ground_1
+    #       props:
+    #         y: 886
+    #         scaleX: 1.175
+          
+    # - compose:
+
+    #     - type: sprite
+    #       image: road_1
+    #       role: base
+
+    #     - type: sprite
+    #       image: ground_1
+    #       props:
+    #         y: -886
+    #         scaleX: 1.175
+
+    #     - type: sprite
+    #       image: ground_1
+    #       props:
+    #         y: 886
+    #         scaleX: 1.175
           
