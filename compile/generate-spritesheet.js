@@ -59,21 +59,18 @@ export async function generateSpritesheet(spritesheets, nodeId, spritesheetName,
 	if (hasPngs) {
 		sprites.hasPng = true;
 		await createSpritesheetFromImages(spritesheetId, sprites, pngs, pngPath);
-		console.log('finished making png');
 	}
 	
 	// generate JPGs
 	if (hasJpgs) {
 		sprites.hasJpg = true;
 		await createSpritesheetFromImages(spritesheetId, sprites, jpgs, jpgPath);
-		console.log('finished making jpg');
 	}
 	
 	// there seems to be some timing issues - give a moment to 
 	// settle down before compressing - ideally, we can just
 	// pipe results eventually
 	await timeout(2000);
-	console.log('settled');
 
 	// verify the resource directory
 	const tmpId = _.snakeCase(spritesheetId);
