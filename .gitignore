@@ -3,4 +3,5 @@
 .dist/
 .vscode/
 node_modules/
+log/
 tsconfig.json
