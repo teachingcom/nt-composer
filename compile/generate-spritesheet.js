@@ -2,28 +2,38 @@ import _ from 'lodash';
 import fs from 'fs-extra';
 import path from 'path';
 import Spritesmith from 'spritesmith';
+import compressImages from 'compress-images';
 
-import { fileToKey, asyncCallback } from './utils.js';
+import { fileToKey, asyncCallback, timeout } from './utils.js';
 import { OUTPUT_DIR } from '../paths.js';
-
-// access to the previous cache
 import * as cache from './cache.js';
 
-/** handles attempting to create a new spritesheet */
+// compression args
+const JPG_COMPRESSION_ARGS = ['-quality', '65'];
+const PNG_COMPRESSION_ARGS = [128, '-f', '--strip' /*, '--skip-if-larger' */];
+
 export async function generateSpritesheet(spritesheets, nodeId, spritesheetName, subdir, images) {
 	const spritesheetId = `${subdir}${spritesheetName || nodeId}`;
-	const file = path.resolve(`${OUTPUT_DIR}/${spritesheetId}.png`);
 
-	// compare write times
-	let lastGenerated;
-	try {
-		const stat = await fs.stat(file);
-		lastGenerated = stat.mtime;
-	}
-	// ignore missing files and just set it to zero
-	catch (ex) {
-		lastGenerated = 0;
-	}
+	// get the possible paths
+	const basePath = path.resolve(`${OUTPUT_DIR}/${spritesheetId}`);
+	const pngPath = `${basePath}.png`;
+	const jpgPath = `${basePath}.jpg`;
+
+	// check for certain type
+	const jpgs = _.filter(images, item => /jpe?g$/i.test(item.path));
+	const pngs = _.filter(images, item => /png$/i.test(item.path));
+
+	// check if 
+	const hasPngs = _.some(pngs);
+	const hasJpgs = _.some(jpgs);
+
+	// check each time, but only if the image type is expected
+	const generatedTimes = [ ];
+	if (hasPngs) generatedTimes.push(getModifiedTime(pngPath));
+	if (hasJpgs) generatedTimes.push(getModifiedTime(jpgPath));
+	let lastGenerated = Math.min.apply(Math, generatedTimes);
+	if (isNaN(lastGenerated)) lastGenerated = 0;
 
 	// if all of the images have a lower write time
 	// than the sprite sheet then we don't need to compile it again
@@ -42,26 +52,101 @@ export async function generateSpritesheet(spritesheets, nodeId, spritesheetName,
 		return;
 	}
 
-	// expired or missing - generate it now
-	console.log('[spritesheet]', spritesheetId);
+	// save the new spritesheet location
+	const sprites = spritesheets[spritesheetId] = { };
+
+	// generate PNGs
+	if (hasPngs) {
+		sprites.hasPng = true;
+		await createSpritesheetFromImages(spritesheetId, sprites, pngs, pngPath);
+		console.log('finished making png');
+	}
 	
+	// generate JPGs
+	if (hasJpgs) {
+		sprites.hasJpg = true;
+		await createSpritesheetFromImages(spritesheetId, sprites, jpgs, jpgPath);
+		console.log('finished making jpg');
+	}
+	
+	// there seems to be some timing issues - give a moment to 
+	// settle down before compressing - ideally, we can just
+	// pipe results eventually
+	await timeout(2000);
+	console.log('settled');
+
+	// verify the resource directory
+	const tmpId = _.snakeCase(spritesheetId);
+	const resourceDir = `dist${path.dirname(basePath).substr(OUTPUT_DIR.length)}`;
+	const tmpDir = `${resourceDir}/_${tmpId}`;
+	await fs.mkdirp(resourceDir);
+
+	// compress resources
+	return new Promise((resolve, reject) => {
+		compressImages(
+			`${tmpDir}/*.{jpg,png}`, // input
+			`${resourceDir}/`, // output
+			{
+				compress_force: true,
+				statistic: true,
+				autoupdate: false,
+			},
+			false, // ??
+			{ jpg: {engine: 'mozjpeg', command: JPG_COMPRESSION_ARGS}},
+			{ png: {engine: 'pngquant', command: PNG_COMPRESSION_ARGS}},
+			{svg: {engine: false, command: false}},
+			{gif: {engine: false, command: false}},
+
+			// finalize
+			async function(error, completed, statistic){
+
+				// remove the temporary generation dir
+				fs.remove(tmpDir);
+
+				// check for errors
+				if (error) {
+					console.error(`Compression failure for ${resourceDir}`);
+					console.error(error);
+					resolve();
+				}
+				// compressed as expected
+				else resolve();
+			});
+		});
+}
+
+// updates the spritesheet with image names
+async function createSpritesheetFromImages(spritesheetId, sprites, images, saveTo) {
+
 	// convert to a spritesheet
 	const src = _.map(images, item => item.path);
 	const { image, coordinates } = await asyncCallback(Spritesmith.run, { src });
+	const ext = path.extname(saveTo).substr(1);
 	
 	// simplify the output format
-	const sprites = { };
 	for (const file in coordinates) {
 		const bounds = coordinates[file];
 		const name = fileToKey(file);
-		sprites[name] = [bounds.x, bounds.y, bounds.width, bounds.height];
+
+		// if this name already exists, then there's a conflict in
+		// names and needs to be stopped
+		if (sprites[name]) {
+			throw new Error(`Conflicting sprite name: ${name} in ${spritesheetId}`)
+		}
+
+		sprites[name] = [bounds.x, bounds.y, bounds.width, bounds.height, ext];
 	}
 
-	// write spritesheet data
-	spritesheets[spritesheetId] = sprites;
-
 	// write the image
-	const targetDir = path.dirname(file);
-	await fs.mkdirp(targetDir);
-	await fs.writeFile(file, image, 'binary');
+	const tmpId = _.snakeCase(spritesheetId);
+	const dir = `${path.dirname(saveTo)}/_${tmpId}`;
+	const target = `${dir}/${path.basename(saveTo)}`
+	await fs.mkdirp(dir);
+	await fs.writeFile(target, image, 'binary');
+}
+
+// check the last modified time for a file, if it exists
+function getModifiedTime(path) {
+	try { return fs.statSync(path).mtime || 0; }
+	catch (ex) { return 0 }
 }

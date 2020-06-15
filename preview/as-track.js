@@ -28,9 +28,10 @@ export default async function setupAsTrack(target, data) {
 	// create a simulator, if using it
 	track = new RaceSimulator(track, {
 		silent: true,
-		noRace: true,
-		skipIntro: true,
-		skipCountdown: true,
+		// delayStart: 15000,
+		noRace: false,
+		skipIntro: false,
+		skipCountdown: false,
 		fastRace: false,
 		slowRace: true,
 		skipRace: false,

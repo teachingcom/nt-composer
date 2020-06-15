@@ -80,7 +80,7 @@ export class RaceSimulator {
 		const speeds = [ 5, 4.5, 4, 3.5, 3 ];
 		const { track, options } = this;
 		const { players } = track;
-		const { fastRace, slowRace } = options;
+		const { fastRace, slowRace, delayStart = 0 } = options;
 		
 		// track race state
 		const state = { };
@@ -102,31 +102,34 @@ export class RaceSimulator {
 		}
 		
 		// begins the race
-		track.startRace();
+		setTimeout(() => {
+			track.startRace();
 
-		// bump each player forward
-		setInterval(() => {
-			let didNitro = false;
+			// bump each player forward
+			setInterval(() => {
+				let didNitro = false;
 
-			// nudge forward
-			for (const id in state) {
-				const player = state[id];
-				player.progress += player.speed;
+				// nudge forward
+				for (const id in state) {
+					const player = state[id];
+					player.progress += player.speed;
 
-				// check for nitros
-				if (!didNitro
-					&& !fastRace
-					&& !player.usedNitro
-					&& Math.random() < (player.progress / 100)) {
-					didNitro = player.usedNitro = true;
-					track.activateNitro(id);
+					// check for nitros
+					if (!didNitro
+						&& !fastRace
+						&& !player.usedNitro
+						&& Math.random() < (player.progress / 100)) {
+						didNitro = player.usedNitro = true;
+						track.activateNitro(id);
+					}
+
+					// update progress
+					track.setProgress(id, player.progress);
 				}
 
-				// update progress
-				track.setProgress(id, player.progress);
-			}
-
-		}, 1000);
+			}, 1000);
+				
+		}, delayStart);
 
 
 	}

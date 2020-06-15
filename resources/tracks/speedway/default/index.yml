@@ -3,149 +3,6 @@ type: track
 speed: 0
 tint: 0x6666ff
 
-# effects:
-#   -
-#     attach_to: car
-#     side: front
-#     compose:
-#       - type: emitter
-
-# foreground:
-#   compose:
-#     - type: emitter
-#       image: //particles/rain
-#       props:
-#         emit.rect.width: 10
-#       emit:
-#         life: [1, 2]
-#         blend: screen
-#         color: [0xffffff, 0x005599]
-#         scale: [0.5, 0.5]
-#         alpha: [1, 0]
-#         speed: [1600, 2400]
-#         dir: [168, 178]
-#         startRotation: -90
-#         freq: 30
-#         rect: [100, 900, 500, 0]
-
-# # start:
-# # end:
-
-# actors:
-
-#   tire:
-
-#     - type: group
-#       props:
-#         y: -800
-        
-#       compose: 
-#         - type: sprite
-#           image: simple_tire
-#           props:
-#             tint: 0xff0000
-#             scaleX: 0.3
-#             scaleY: 0.3
-        
-#         - type: sprite
-#           image: simple_tire
-#           props:
-#             tint: 0xffffff
-#             x: [:rx, -30, 30]
-#             y: -40
-#             scaleX: 0.3
-#             scaleY: 0.3
-        
-#         - type: sprite
-#           image: simple_tire
-#           props:
-#             tint: 0xff0000
-#             y: -80
-#             x: [:rx, -60, 60]
-#             scaleX: 0.3
-#             scaleY: 0.3
-
-# actor:
-#   type: crowd
-#   animation: [cheer, jump, clap, wave]
-#   actor: [ robo_1, man_2 ]
-
-# crowd:
-#   compose:
-
-#     - type: repeater
-#       marginX: 0
-#       marginY: 0
-#       repeatX: 20
-#       repeatY: 3
-
-#       compose: 
-#         - type: crowd
-#           animation: [cheer, jump, clap, wave]
-#           actor: [ robo_1, man_2 ]
-
-#     - type: repeater
-#       marginX: 0
-#       marginY: 0
-#       repeatX: 20
-#       repeatY: 3
-#       props:
-
-#       compose: 
-#         - type: crowd
-#           animation: [cheer, jump, clap, wave]
-#           actor: [ robo_1, man_2 ]
-#           props:
-#             y: -60
-#             x: 20
-
-#     - type: repeater
-#       marginX: 0
-#       marginY: 0
-#       repeatX: 20
-#       repeatY: 3
-#       props:
-
-#       compose: 
-#         - type: crowd
-#           animation: [cheer, jump, clap, wave]
-#           actor: [ robo_1, man_2 ]
-#           props:
-#             y: -120
-#             x: -20
-
-#     # - type: crowd
-#     #   animation: cheer
-#     #   actor: man_2
-    
-#     # - type: crowd
-#     #   animation: wave
-#     #   actor: man_2
-    
-#     # - type: crowd
-#     #   animation: clap
-#     #   actor: man_2
-    
-#     # - type: crowd
-#     #   animation: jump
-#       # actor: man_2
-
-#     # - type: crowd
-#     #   animation: cheer
-#     #   actor: man_1
-#     #   scale: 0.5
-#     #   props:
-#     #     x: 390
-#     #     y: -560
-
-#     # - type: crowd
-#     #   animation: cheer
-#     #   actor: man_1
-#     #   scale: 2
-#     #   props:
-#     #     x: 430
-#     #     y: -590
-
 align_bottom:
   props:
     pivot.y: 1
@@ -161,24 +18,49 @@ track:
 
   start:
 
-    - type: crowd
-      actor: boy_1
-      animation: jump
+    - type: emitter
+      images:
+        - //particles/confetti_1
+        - //particles/confetti_2
+        - //particles/confetti_3
+        - //particles/confetti_4
+      
       props:
-        x: 800
+        z: 100
+        y: -200
+        x: 500
 
-    - type: crowd
-      actor: boy_1
-      animation: cheer
-      props:
-        x: 400
+      emit:
+        rect: [2000, 800]
+        freq: 45
+        life: 3
+        scale: [0.5, 0.1]
+        dir: [100, 120]
+        speed: [60, 120]
+        alpha: [0, 1, 1, 1, 1, 1, 1, 0]
+        rotation: [-10, 80]
+        startRotation: [0, 360]
+        per: 3
+        chance: 0.5
 
-    - type: crowd
-      actor: boy_1
-      animation: wave
+    - type: repeater
+      cols: 30
+      rows: 3
+      sortBy: y
+      offsetX: 50
+      offsetY: 60
+
       props:
-        x: 600
-    
+        y: -600
+        x: -500
+
+      compose:
+        - type: crowd
+          actor: style_1
+          props:
+            x: [:range, -13, 13]
+            y: [:range, -13, 13]
+
     - type: sprite
       image: grass_1
       base: /align_top
@@ -329,6 +211,7 @@ track:
         compose:
           
           - type: sprite
-            image: [:pick, road_1, road_2, road_3 ]
+            # image: [:pick, road_1, road_2, road_3 ]
+            image: road_1
             role: base
 

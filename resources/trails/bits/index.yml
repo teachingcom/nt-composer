@@ -1,0 +1,48 @@
+type: trail
+
+compose:
+
+  - type: emitter
+    image: //particles/trail_bit
+    props:
+      y: -14
+      z: 1
+
+    emit:
+      rect: [0, 120]
+      freq: 6
+      life: 1
+      dir: [180, 180]
+      speed: [400, 500]
+      alpha: [1, 1, 1, 1, 0]
+      scale: [0, 1, 1, 1, 1]
+      startRotation: 180
+      per: 1
+
+  - type: emitter
+    image: //particles/trail_bit_mini
+    props:
+      y: -14
+
+    emit:
+      rect: [0, 120]
+      color: [0xff9900, 0xff0000]
+      blend: add
+      freq: 4
+      life: 1
+      dir: [180, 180]
+      speed: [400, 500]
+      alpha: [1, 1, 1, 1, 0]
+      scale: [0, 1, 1, 1, 1]
+      startRotation: 180
+      per: 1
+
+
+  - base: //emitters/ambient_glow
+    image: //particles/trail_bit_spark
+    emit:
+      rect: [10, 100]
+      color: [0xff6600, 0xff0000]
+      rotation: 0
+      startRotation: 0
+      scale: [2, 1]

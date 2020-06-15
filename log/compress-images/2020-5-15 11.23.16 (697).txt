@@ -1,0 +1,7 @@
+File from: [dist/_particles/particles.png]
+
+File to: [dist/particles.png]
+
+Compression algorithm: [pngquant]
+
+Description: Error: Command failed: /Users/hugo/work/composer/node_modules/pngquant-bin/vendor/pngquant 128 --quality=80-100 -f --strip -o dist/particles.png dist/_particles/particles.png

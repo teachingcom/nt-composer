@@ -42,7 +42,7 @@ export async function getDirectoryContents(dir) {
 
 		// add to the correct group
 		const ref = !!~['.yml', '.yaml'].indexOf(ext) ? markup
-			: !!~['.jpg', '.png'].indexOf(ext) ? images
+			: !!~['.jpg', '.jpeg', '.png'].indexOf(ext) ? images
 			: null;
 
 		// create the record
@@ -65,4 +65,11 @@ export async function asyncCallback(action, ...args) {
 /** generates a key from a file name or path */
 export function fileToKey(file) {
 	return _.snakeCase(path.basename(file, path.extname(file)))
+}
+
+/** waits a specified time */
+export async function timeout(time) {
+	return new Promise(resolve => {
+		setTimeout(resolve, time);
+	});
 }
