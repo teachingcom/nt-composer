@@ -32,8 +32,8 @@ export default async function setupAsTrack(target, data) {
 		noRace: false,
 		skipIntro: false,
 		skipCountdown: false,
-		fastRace: false,
-		slowRace: true,
+		fastRace: true,
+		slowRace: false,
 		skipRace: false,
 	});
 
