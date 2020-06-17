@@ -8,16 +8,17 @@ compose:
       y: -14
 
     emit:
-      rect: [0, 120]
-      freq: 6
-      life: 1
-      scale: [1, 0.5]
+      rect: [0, 60]
+      freq: 8
+      life: [0.5, 1]
+      scale: [0.75, 0.4]
       dir: [177, 183]
       speed: [400, 500]
       alpha: [1, 1, 1, 1, 0]
       rotation: [-10, 10]
       startRotation: [0, 360]
       per: 1
+      chance: 0.7
 
   - type: emitter
     image: //particles/sparkle_1
@@ -25,21 +26,15 @@ compose:
       y: -14
 
     emit:
-      rect: [0, 90]
-      freq: 33
+      rect: [0, 60]
+      freq: 8
       life: 0.5
       blend: add
       scale: [2, 1]
       dir: [177, 183]
-      speed: [200, 300]
+      speed: [400, 600]
       alpha: [1, 0]
       rotation: [-10, 10]
       startRotation: [0, 360]
-      per: 3
+      per: 2
       chance: 0.5
-
-
-  - base: //emitters/ambient_glow
-    emit:
-      rect: [10, 100]
-      color: [0xfff000, 0xff0000]

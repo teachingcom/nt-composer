@@ -24,6 +24,12 @@ export default async function setupAsCompose(target, data) {
 		throw ex;
 	}
 
+	// repeatedly activate nitros
+	setTimeout(() => {
+		view.activateNitro();
+		setInterval(() => view.activateNitro(), 5000);
+	}, 1000);
+
 	// handle resizing
 	const update = () => view.render();
 	const resize = () => view.resize();

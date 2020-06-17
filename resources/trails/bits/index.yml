@@ -11,16 +11,17 @@ compose:
     emit:
       rect: [0, 120]
       freq: 6
-      life: 1
+      life: [0.5, 1]
       dir: [180, 180]
       speed: [400, 500]
       alpha: [1, 1, 1, 1, 0]
       scale: [0, 1, 1, 1, 1]
       startRotation: 180
       per: 1
+      chance: 0.5
 
   - type: emitter
-    image: //particles/trail_bit_mini
+    image: //particles/trail_bit_spark
     props:
       y: -14
 
@@ -28,7 +29,7 @@ compose:
       rect: [0, 120]
       color: [0xff9900, 0xff0000]
       blend: add
-      freq: 4
+      freq: 7
       life: 1
       dir: [180, 180]
       speed: [400, 500]
@@ -36,13 +37,4 @@ compose:
       scale: [0, 1, 1, 1, 1]
       startRotation: 180
       per: 1
-
-
-  - base: //emitters/ambient_glow
-    image: //particles/trail_bit_spark
-    emit:
-      rect: [10, 100]
-      color: [0xff6600, 0xff0000]
-      rotation: 0
-      startRotation: 0
-      scale: [2, 1]
+      chance: 0.5

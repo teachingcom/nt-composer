@@ -27,8 +27,7 @@ compose:
 
     emit:
       rect: [0, 80]
-      # color: [ 0xff9999, 0xff99ff ]
-      freq: 22
+      freq: 7
       life: 0.8
       blend: add
       dir: [177, 183]
@@ -36,5 +35,22 @@ compose:
       alpha: [0, 1, 1, 0]
       scale: [0.7, 0.5]
       rotation: [-360, 360]
-      per: 2
+      chance: 0.5
+
+  - type: emitter
+    image: //particles/sparkle_3
+    props:
+      y: -14
+      z: 3
+
+    emit:
+      rect: [0, 80]
+      freq: 7
+      life: 0.8
+      blend: add
+      dir: [177, 183]
+      speed: [300, 400]
+      alpha: [0, 1, 1, 0]
+      scale: [0.7, 0.5]
+      rotation: [-360, 360]
       chance: 0.5
