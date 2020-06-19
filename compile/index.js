@@ -12,12 +12,14 @@ import path from 'path';
 import * as cache from './cache.js';
 import generateResource from './generate-resource.js';
 import generateResourcesFromDirectory from './generate-resource-from-dir.js';
+import generateSoundsSpritesheet from './generate-sounds-spritesheet.js';
 import scanDirectory from './scan-directory.js';
+
+import { OUTPUT_DIR, INPUT_DIR } from '../paths.js';
+import { compileProgressPath } from './compile-progress-path.js';
 
 // check if debugging mode should be used
 const DEBUG = !!~process.argv.indexOf('--debug');
-import { OUTPUT_DIR, INPUT_DIR } from '../paths.js';
-import { compileProgressPath } from './compile-progress-path.js';
 
 /** handles compiling all resources in the repo folder */
 async function compile() {
@@ -34,6 +36,9 @@ async function compile() {
 	const data = { };
 	if (!('spritesheets' in data)) data.spritesheets = { };
 	if (!('tracks' in data)) data.tracks = { };
+
+	// create the sounds, if needed
+	await generateSoundsSpritesheet(data);
 
 	// start generating files
 	await generateResource(data, data, 'particles', { });
