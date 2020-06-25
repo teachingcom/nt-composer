@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "type": "module",
+  "bin": {
+    "nt-compose": "bin/nt-compose.js"
+  },
   "scripts": {
     "compile": "npx babel-node ./compile/index.js",
     "preview": "npx babel-node ./preview/server.js",
@@ -39,6 +42,7 @@
     "omgsvg": "https://github.com/deanm/omgsvg",
     "parcel-bundler": "^1.12.4",
     "pngquant": "^3.0.0",
+    "shelljs": "^0.8.4",
     "spritesmith": "^3.4.0",
     "stats.js": "^0.17.0",
     "xml2js": "^0.4.23"
