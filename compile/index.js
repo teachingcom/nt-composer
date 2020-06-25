@@ -15,7 +15,7 @@ import generateResourcesFromDirectory from './generate-resource-from-dir.js';
 import generateSoundsSpritesheet from './generate-sounds-spritesheet.js';
 import scanDirectory from './scan-directory.js';
 
-import { OUTPUT_DIR, INPUT_DIR } from '../paths.js';
+import paths from '../paths.js';
 import { compileProgressPath } from './compile-progress-path.js';
 
 // check if debugging mode should be used
@@ -23,6 +23,7 @@ const DEBUG = !!~process.argv.indexOf('--debug');
 
 /** handles compiling all resources in the repo folder */
 async function compile() {
+	const { INPUT_DIR, OUTPUT_DIR } = paths;
 	const exported = path.resolve(`${OUTPUT_DIR}/export.json`);
 
 	// load the previous document into the cache
@@ -88,4 +89,4 @@ async function compile() {
 
 
 // kick off the compile
-(async () => await compile())();
+// (async () => await compile())();

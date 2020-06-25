@@ -1,16 +1,18 @@
 import editor from './editor';
-import manifest from '../dist/export.json';
 import Stats from 'stats.js';
+import { loadManifest } from './manifest';
 
 // view types
 import setupAsTrack from './as-track';
 import setupAsCompose from './as-compose';
 
-// sharing for debugging help
-window.MANIFEST = manifest;
-
 // reload page content
 async function init() {
+
+	// requires the player manifest
+	await loadManifest();
+
+	// prepare the view
 	const canvas = document.querySelector('#view > canvas');
 	const stats = new Stats();
 	

@@ -3,17 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "bin": {
-    "nt-compose": "bin/nt-compose.js"
+    "nt-previewer": "bin/nt-preview.js",
+    "nt-compile": "bin/nt-compile.js"
   },
   "scripts": {
-    "compile": "npx babel-node ./compile/index.js",
-    "preview": "npx babel-node ./preview/server.js",
-    "watch:edit": "npx nodemon -x \"npm run compile\" -w ./resources -e \"yml,png,jpg\"",
-    "launch:browser": "open http://localhost:9999",
-    "dev": "concurrently --kill-others \"npm run preview\" \"npm run watch:edit\"",
-    "start": "npm run launch:browser && npm run dev"
+    "clean": "rm -r ./dist",
+    "deploy:previewer": "npx parcel build -t node -d ./dist -o server.js ./preview/server.js && npx parcel build -t browser -d ./dist/client ./preview/index.html",
+    "deploy:compiler": "npx parcel build -t node -d ./dist -o compile.js ./compile/index.js"
   },
   "author": "",
   "license": "ISC",
@@ -25,6 +22,7 @@
     "SuperCanvas": "https://github.com/NickBeeuwsaert/SuperCanvas",
     "babel-preset-env": "^1.7.0",
     "bezier-js": "^2.6.1",
+    "commander": "^5.1.0",
     "compress-images": "^1.7.8",
     "concurrently": "^5.2.0",
     "fluent-ffmpeg": "^2.1.2",

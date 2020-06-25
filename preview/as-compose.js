@@ -1,8 +1,9 @@
 import toast from './toast';
 import { Composer } from 'nt-track';
-import manifest from '../dist/export.json';
+import manifest from './manifest';
 
 export default async function setupAsCompose(target, data) {
+
 	// always create a track
 	const view = new Composer();
 

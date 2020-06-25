@@ -4,10 +4,11 @@ import path from 'path';
 
 import { getDirectoryContents, readYml, fileToKey } from './utils.js';
 import { generateSpritesheet } from './generate-spritesheet.js';
-import { INPUT_DIR } from '../paths.js';
+import paths from '../paths.js';
 
 /** generates a resource item */
 export default async function generateResource(root, node, id, options) {
+	const { INPUT_DIR } = paths;
 	const hasSubdir = !!options.subdir;
 	const subdir = hasSubdir ? `${options.subdir}/` : '';
 	const pathId = `${subdir}${id}`;

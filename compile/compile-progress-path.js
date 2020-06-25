@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import { INPUT_DIR } from '../paths.js';
+import paths from '../paths.js';
 import xml2js from 'xml2js';
 import omgsvg from 'omgsvg/omgsvg.js';
 import Bezier from 'bezier-js';
@@ -15,6 +15,7 @@ export async function compileProgressPath() {
 
 // reads in the svg data
 async function extractFile() {
+	const { INPUT_DIR } = paths;
 	const source = await fs.readFile(`${INPUT_DIR}/race-progress.svg`);
 	const markup = source.toString();
 	const doc = await xml2js.parseStringPromise(markup);

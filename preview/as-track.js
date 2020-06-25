@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { Track } from 'nt-track';
 import toast from "./toast";
-import manifest from '../dist/export.json';
+import manifest from './manifest';
 import { RaceSimulator } from './simulator';
 
 

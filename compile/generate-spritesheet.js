@@ -5,7 +5,7 @@ import Spritesmith from 'spritesmith';
 import compressImages from 'compress-images';
 
 import { fileToKey, asyncCallback, timeout } from './utils.js';
-import { OUTPUT_DIR } from '../paths.js';
+import paths from '../paths.js';
 import * as cache from './cache.js';
 
 // compression args
@@ -13,6 +13,7 @@ const JPG_COMPRESSION_ARGS = ['-quality', '65'];
 const PNG_COMPRESSION_ARGS = [128, '-f', '--strip' /*, '--skip-if-larger' */];
 
 export async function generateSpritesheet(spritesheets, nodeId, spritesheetName, subdir, images) {
+	const { OUTPUT_DIR } = paths;
 	const spritesheetId = `${subdir}${spritesheetName || nodeId}`;
 
 	// get the possible paths

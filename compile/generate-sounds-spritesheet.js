@@ -5,16 +5,13 @@ import path from 'path';
 import getMP3Duration from 'get-mp3-duration';
 import fluent from 'fluent-ffmpeg';
 
-// weird import issue
-import NodeLame from 'node-lame';
-const { Lame } = NodeLame;
-
 import { fileToKey } from './utils.js';
-import { INPUT_DIR, OUTPUT_DIR } from '../paths.js';
+import paths from '../paths.js';
 import getMp3Duration from 'get-mp3-duration';
 
 // create sound sprites from 
 export default async function generateSoundSprites(root) {
+	const { INPUT_DIR, OUTPUT_DIR } = paths;
 	const dir = 'sounds';
 	const input = path.resolve(INPUT_DIR, dir)
 
@@ -44,11 +41,10 @@ export default async function generateSoundSprites(root) {
 	}
 
 	// gather the paths to concat
-	const paths = [ ];
+	const files = [ ];
 	const silence = path.resolve(INPUT_DIR, 'silence.mp3');
 	const silenceBuffer = await fs.readFile(silence);
 	const spacer = getMp3Duration(silenceBuffer);
-	console.log('len', spacer);
 
 	// calculate the sprite info
 	let duration = 0;
@@ -56,7 +52,7 @@ export default async function generateSoundSprites(root) {
 	for (const sprite of sprites) { 
 
 		// save the file to use
-		paths.push(sprite.file, silence);
+		files.push(sprite.file, silence);
 
 		// get the key
 		const key = fileToKey(sprite.file);
@@ -69,7 +65,7 @@ export default async function generateSoundSprites(root) {
 
 	// merge the files
 	const output = path.resolve(OUTPUT_DIR, `sounds/common.mp3`);
-	await mergeMP3FilesToOutput(output, paths);
+	await mergeMP3FilesToOutput(output, files);
 	console.log(`[audio] ${dir}/common.mp3`);
 }
 
