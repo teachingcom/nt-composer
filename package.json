@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "bin": {
-    "nt-previewer": "bin/nt-preview.js",
+    "nt-preview": "bin/nt-preview.js",
     "nt-compile": "bin/nt-compile.js"
   },
   "scripts": {
