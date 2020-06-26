@@ -3,6 +3,15 @@ import toast from './toast';
 const PATHS_LOCAL_STORAGE = 'nt-animator:path';
 const DEFAULT_MESSAGE = 'Enter node paths to render';
 
+// check if this is the first attempt
+const starting = localStorage.getItem(PATHS_LOCAL_STORAGE);
+if (starting === null || starting === undefined) {
+	localStorage.setItem(PATHS_LOCAL_STORAGE, `/cars/police_cruiser
+/trails/burnout
+`);
+}
+
+
 // the change handler
 let handleChange;
 
