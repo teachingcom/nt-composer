@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { Track } from 'nt-track';
 import toast from "./toast";
-import manifest from './manifest';
+import getManifest from './manifest';
 import { RaceSimulator } from './simulator';
 
 
@@ -12,6 +12,7 @@ const LANE_PATTERN = [ [2], [1,3], [2,0,4], [0,1,3,4], [0,1,2,3,4] ];
 // create cars and a track
 export default async function setupAsTrack(target, data) {
 	const path = data.tracks.pop();
+	const manifest = getManifest();
 
 	// create the track instance
 	let track = new Track();

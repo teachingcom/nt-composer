@@ -2694,7 +2694,7 @@ chokidar@^2.1.5:
   optionalDependencies:
     fsevents "^1.2.7"
 
-chokidar@^3.2.2:
+chokidar@^3.2.2, chokidar@^3.4.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.4.0.tgz#b30611423ce376357c765b9b8f904b9fba3c0be8"
   integrity sha512-aXAaho2VJtisB/1fg1+3nlLJqGOuewTzQpd/Tz0yTg2R0e4IGtshYvtjowyEumcBv2z+y4+kc75Mz7j5xJskcQ==
@@ -3401,7 +3401,7 @@ debug@^3.0.0, debug@^3.1.1, debug@^3.2.6:
   dependencies:
     ms "^2.1.1"
 
-debug@^4.1.0:
+debug@^4.1.0, debug@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.1.1.tgz#3b72260255109c6b589cee050f1d516139664791"
   integrity sha512-pYAIzeRo8J6KPEaJ0VWOh5Pzkbw/RetuzehGM7QRRX5he4fPHx2rdKMB256ehJCkX+XRQm16eZLqLNS8RSZXZw==
@@ -8208,6 +8208,11 @@ querystring@0.2.0:
   resolved "https://registry.yarnpkg.com/querystring/-/querystring-0.2.0.tgz#b209849203bb25df820da756e747005878521620"
   integrity sha1-sgmEkgO7Jd+CDadW50cAWHhSFiA=
 
+queue-microtask@^1.1.0:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.1.3.tgz#9188ce1b10f9350330c509982c8b1c640e0592a7"
+  integrity sha512-zC1ZDLKFhZSa8vAdFbkOGouHcOUMgUAI/2/3on/KktpY+BaVqABkzDSsCSvJfmLbICOnrEuF9VIMezZf+T0mBA==
+
 quote-stream@^1.0.1, quote-stream@~1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/quote-stream/-/quote-stream-1.0.2.tgz#84963f8c9c26b942e153feeb53aae74652b7e0b2"
@@ -8226,7 +8231,7 @@ randomatic@^3.0.0:
     kind-of "^6.0.0"
     math-random "^1.0.1"
 
-randombytes@^2.0.0, randombytes@^2.0.1, randombytes@^2.0.5:
+randombytes@^2.0.0, randombytes@^2.0.1, randombytes@^2.0.3, randombytes@^2.0.5:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/randombytes/-/randombytes-2.1.0.tgz#df6f84372f0270dc65cdf6291349ab7a473d4f2a"
   integrity sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==
@@ -8903,6 +8908,17 @@ simple-swizzle@^0.2.2:
   integrity sha1-pNprY1/8zMoz9w0Xy5JZLeleVXo=
   dependencies:
     is-arrayish "^0.3.1"
+
+simple-websocket@^9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/simple-websocket/-/simple-websocket-9.0.0.tgz#fda93b9cdeb106e57e5fcc436ee0d1d8eb8836fc"
+  integrity sha512-Q+u1BJ06/FR30xS1Sf6zDuL+vAdAA7VFqZ0TdKpmQKB2uNTAPKWQFFhUDV4YD7TDi7gSRJXoxv21WprNPR0ykQ==
+  dependencies:
+    debug "^4.1.1"
+    queue-microtask "^1.1.0"
+    randombytes "^2.0.3"
+    readable-stream "^3.1.1"
+    ws "^7.0.0"
 
 slash@^3.0.0:
   version "3.0.0"
@@ -10241,6 +10257,11 @@ ws@^6.1.2:
   integrity sha512-GIyAXC2cB7LjvpgMt9EKS2ldqr0MTrORaleiOno6TweZ6r3TKtoFQWay/2PceJ3RuBasOHzXNn5Lrw1X0bEjqA==
   dependencies:
     async-limiter "~1.0.0"
+
+ws@^7.0.0:
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-7.3.0.tgz#4b2f7f219b3d3737bc1a2fbf145d825b94d38ffd"
+  integrity sha512-iFtXzngZVXPGgpTlP1rBqsUK82p9tKqsWRPg5L56egiljujJT3vGAYnHANvFxBieXrTFavhzhxW52jnaWV+w2w==
 
 xdg-basedir@^4.0.0:
   version "4.0.0"

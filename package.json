@@ -8,9 +8,14 @@
     "nt-compile": "bin/nt-compile.js"
   },
   "scripts": {
-    "clean": "rm -r ./dist",
-    "deploy:previewer": "npx parcel build -t node -d ./dist -o server.js ./preview/server.js && npx parcel build -t browser -d ./dist/client ./preview/index.html",
-    "deploy:compiler": "npx parcel build -t node -d ./dist -o compile.js ./compile/index.js"
+    "clean": "rm -rf ./dist/*",
+    "clean:compile": "rm -r ./dist/compile*.js",
+    "clean:previewer": "rm -r ./dist/client && rm ./dist/server*.js",
+    "preview": "node ./bin/nt-preview.js",
+    "compile": "node ./bin/nt-compile.js",
+    "deploy": "yarn clean && yarn deploy:previewer && yarn deploy:compiler",
+    "deploy:previewer": "yarn clean:previewer && npx parcel build --no-content-hash -t node -d ./dist -o server.js ./preview/server.js && npx parcel build --no-content-hash -t browser -d ./dist/client ./preview/index.html",
+    "deploy:compiler": "yarn clean:compile && npx parcel build --no-content-hash -t node -d ./dist -o compile.js ./compile/index.js"
   },
   "author": "",
   "license": "ISC",
@@ -22,6 +27,7 @@
     "SuperCanvas": "https://github.com/NickBeeuwsaert/SuperCanvas",
     "babel-preset-env": "^1.7.0",
     "bezier-js": "^2.6.1",
+    "chokidar": "^3.4.0",
     "commander": "^5.1.0",
     "compress-images": "^1.7.8",
     "concurrently": "^5.2.0",
@@ -41,6 +47,7 @@
     "parcel-bundler": "^1.12.4",
     "pngquant": "^3.0.0",
     "shelljs": "^0.8.4",
+    "simple-websocket": "^9.0.0",
     "spritesmith": "^3.4.0",
     "stats.js": "^0.17.0",
     "xml2js": "^0.4.23"

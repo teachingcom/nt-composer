@@ -1,6 +1,0 @@
-type: extra
-
-compose:
-  - type: mask
-    width: 100
-    height: 100

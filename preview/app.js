@@ -1,16 +1,40 @@
 import editor from './editor';
 import Stats from 'stats.js';
+import Socket from 'simple-websocket';
 import { loadManifest } from './manifest';
 
 // view types
 import setupAsTrack from './as-track';
 import setupAsCompose from './as-compose';
+import toast from './toast';
 
 // reload page content
 async function init() {
 
 	// requires the player manifest
 	await loadManifest();
+
+	// listen for changes from a websocket --
+	// any data coming down is enough to know to refresh
+	const { hostname, port } = window.location;
+	const socket = new Socket(`ws://${hostname}:${1 + (0 | port)}`);
+	socket.on('data', data => {
+		const message = getMessage(data);
+		
+		// server started compiling assets
+		if (message === 'pending')
+			toast('success', 'Changes detected. Waiting for server update');
+
+		// server finished refreshing
+		else if (message === 'refresh') {
+			toast('success', 'Reloading page after asset update');
+			window.location.reload();
+		}
+		// there was an error
+		else if (message === 'error') {
+			toast('error', 'Error compiling assets. Check terminal for more info');
+		}
+	});
 
 	// prepare the view
 	const canvas = document.querySelector('#view > canvas');
@@ -30,7 +54,10 @@ async function init() {
 	editor.init(reload);
 
 	// handles loading a view
+	let requiresReload;
 	async function reload(data) {
+		if (requiresReload) window.location.reload();
+		requiresReload = true;
 		
 		// determine the view type
 		const handler = data.tracks.length > 0 ? setupAsTrack
@@ -66,6 +93,14 @@ async function init() {
 
 	// start updating
 	refresh();
+}
+
+// reads a socket message
+function getMessage(bytes) {
+	const chars = [ ];
+	for (const byte of bytes || [ ])
+		chars.push(String.fromCharCode(byte));
+	return chars.join('');
 }
 
 // initialize

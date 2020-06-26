@@ -72,6 +72,7 @@ export default async function generateSoundSprites(root) {
 
 // copy and compress each MP3 in a directory
 async function copyMP3s(dir) {
+	const { INPUT_DIR, OUTPUT_DIR } = paths;
 	const input = path.resolve(INPUT_DIR, dir);
 	const output = path.resolve(OUTPUT_DIR, dir);
 
