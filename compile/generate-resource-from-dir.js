@@ -1,5 +1,5 @@
 import path from 'path';
-import paths from '../paths.js';
+import paths from './paths.js';
 import generateResource from './generate-resource.js';
 import scanDirectory from './scan-directory.js';
 

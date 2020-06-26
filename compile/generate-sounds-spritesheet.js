@@ -6,7 +6,7 @@ import getMP3Duration from 'get-mp3-duration';
 import fluent from 'fluent-ffmpeg';
 
 import { fileToKey } from './utils.js';
-import paths from '../paths.js';
+import paths from './paths.js';
 import getMp3Duration from 'get-mp3-duration';
 
 // create sound sprites from 

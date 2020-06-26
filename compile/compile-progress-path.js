@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import paths from '../paths.js';
+import paths from './paths.js';
 import xml2js from 'xml2js';
 import omgsvg from 'omgsvg/omgsvg.js';
 import Bezier from 'bezier-js';

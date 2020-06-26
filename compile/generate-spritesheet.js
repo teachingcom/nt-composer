@@ -5,7 +5,7 @@ import Spritesmith from 'spritesmith';
 import compressImages from 'compress-images';
 
 import { fileToKey, asyncCallback, timeout } from './utils.js';
-import paths from '../paths.js';
+import paths from './paths.js';
 import * as cache from './cache.js';
 
 // compression args

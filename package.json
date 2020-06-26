@@ -9,8 +9,8 @@
   },
   "scripts": {
     "clean": "rm -rf ./dist/*",
-    "clean:compile": "rm -r ./dist/compile*.js",
-    "clean:previewer": "rm -r ./dist/client && rm ./dist/server*.js",
+    "clean:compile": "rm -f ./dist/compile*.js",
+    "clean:previewer": "rm -rf ./dist/client && rm -f ./dist/server*.js",
     "preview": "node ./bin/nt-preview.js",
     "compile": "node ./bin/nt-compile.js",
     "deploy": "yarn clean && yarn deploy:previewer && yarn deploy:compiler",

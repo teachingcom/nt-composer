@@ -2,7 +2,7 @@ import _ from 'lodash';
 import fs from 'fs-extra';
 import path from 'path';
 import * as cache from './cache.js';
-import paths, { replacePaths } from '../paths.js';
+import paths, { replacePaths } from './paths.js';
 
 // resource generation approaches
 import generateResource from './generate-resource.js';

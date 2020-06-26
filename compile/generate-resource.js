@@ -4,7 +4,7 @@ import path from 'path';
 
 import { getDirectoryContents, readYml, fileToKey } from './utils.js';
 import { generateSpritesheet } from './generate-spritesheet.js';
-import paths from '../paths.js';
+import paths from './paths.js';
 
 /** generates a resource item */
 export default async function generateResource(root, node, id, options) {
