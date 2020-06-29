@@ -35,14 +35,14 @@ export async function serve(config) {
 	if (isNaN(CONFIG.port) || CONFIG.port < 1000) CONFIG.port = 9999;
 
 	// check for the development bundler
-	let requiresBundler;
 	let bundler;
 
 	// create the bundler which is just serving
 	// the index html file
-	if (requiresBundler) {
+	if (config.dev) {
+		console.log('[mode] using dev mode');
 		bundler = new Bundler(`${ROOT}/preview/index.html`, {
-			outDir: './.dist',
+			outDir: './.preview/client',
 			sourceMaps: true,
 			cache: false
 		});
@@ -54,16 +54,19 @@ export async function serve(config) {
 	// communicate for websockets
 	configureWebSockets();
 
+	// use pre-compiled track/animator
+	if (!config.dev) {
+		app.use(express.static(`${ROOT}/dist/client`));
+	}
+
 	// share the root to allow access to node_modules
 	// primarily to allow access to source maps
-	app.use(express.static(`${ROOT}/dist/client`));
 	app.use(express.static(`${ROOT}/node_modules`));
 
 	// access to non-compiled assets
 	app.use(express.static(`${ROOT}/public`));
 
 	// access to compiled assets and spritesheets
-	// app.use(express.static(`${ROOT}/dist`));
 	app.use(express.static(CONFIG.output));
 
 	// wait for changes
@@ -73,7 +76,7 @@ export async function serve(config) {
 		.on('unlink', queueCompileAssets);
 
 	// inject parcel bundler
-	if (requiresBundler) {
+	if (config.dev) {
 		app.use(bundler.middleware());
 	}
 

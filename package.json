@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "source": true,
   "bin": {
     "nt-preview": "bin/nt-preview.js",
     "nt-compile": "bin/nt-compile.js"
