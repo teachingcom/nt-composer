@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 
 // activates a simulated race
 export class RaceSimulator {
@@ -11,6 +12,11 @@ export class RaceSimulator {
 
 		// starting the race animation
 		track.on('start', this.startRace);
+
+		// check if not racing
+		if (!!this.options.noRace) {
+			this.attachSlider();
+		}
 
 		// proxy a few things
 		this.animator = track.animator;
@@ -77,7 +83,7 @@ export class RaceSimulator {
 
 	// handles the race activation
 	startRace = () => {
-		const speeds = [ 5, 4.5, 4, 3.5, 3 ];
+		const speeds = [ 5, 4.75, 4.5, 4.25, 4 ];
 		const { track, options } = this;
 		const { players } = track;
 		const { fastRace, slowRace, delayStart = 0 } = options;
@@ -90,13 +96,19 @@ export class RaceSimulator {
 
 			// grab a speed to use
 			const index = 0 | (Math.random() * speeds.length);
-			const speed = (speeds[index] * slowRace ? 0.25 : 1);
+			
+			// grab a speed value to use
+			const speed = speeds[index];
+			if (slowRace) speed *= 0.25;
+			if (fastRace) speed *= 2.5;
+
+			// don't allow more than one car to use it
 			speeds.splice(index, 1);
 
 			// save the player state
 			state[`player_${i}`] = {
 				speed,
-				progress: fastRace ? 85 : 0,
+				progress: 0,
 				usedNitro: false
 			};
 		}
@@ -131,6 +143,46 @@ export class RaceSimulator {
 				
 		}, delayStart);
 
+
+	}
+
+	// create a slider that scrubs the track forward and back a bit
+	attachSlider = () => {
+		const { track } = this;
+
+		// don't finish more than once
+		let hasFinished = false;
+
+		// if not animated, include a range slider
+		const slider = document.createElement('input');
+		document.body.appendChild(slider);
+		slider.id = 'track-scrubber';
+
+		// set the range
+		slider.type = 'range';
+		slider.min = '-3000';
+		slider.max = '15000';
+		slider.value = '0';
+
+		let origin = 0;
+		slider.onmousedown = () => origin = track.track.trackPosition;
+		slider.oninput = () => {
+			if (!hasFinished && slider.value === slider.max) {
+				this.immediateFinish();
+				hasFinished = true;
+
+				// disable for a moment to prevent messing up the
+				// finish line animation
+				slider.disabled = 'disabled';
+				setTimeout(() => slider.disabled = '', 1000);
+			}
+			else {
+				const value = -(0 | slider.value)
+				track.setScroll(origin + value);
+			}
+		};
+
+		slider.onchange = () => slider.value = '0';
 
 	}
 

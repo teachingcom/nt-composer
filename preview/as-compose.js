@@ -14,7 +14,8 @@ export default async function setupAsCompose(target, data) {
 			baseHeight: 800,
 			target,
 			manifest,
-			baseUrl: '/'
+			baseUrl: '/',
+			silent: !!data.silent
 		});
 
 		// compose each item

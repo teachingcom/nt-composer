@@ -21,21 +21,19 @@ export default async function setupAsTrack(target, data) {
 		manifest,
 		baseUrl: '/',
 		staticUrl: '/cars',
-		activePlayerId: `player_0`,
-		sfx: false,
+		sfx: !!data.silent,
 		music: false
 	});
 
 	// create a simulator, if using it
 	track = new RaceSimulator(track, {
-		silent: true,
-		// delayStart: 15000,
-		noRace: false,
-		skipIntro: false,
-		skipCountdown: false,
-		fastRace: true,
-		slowRace: false,
-		skipRace: false,
+		silent: !!data.silent,
+		noRace: !!data.noRace,
+		skipIntro: !!data.skipIntro,
+		skipCountdown: !!data.skipCountdown,
+		fastRace: !!data.fastRace,
+		slowRace: !!data.slowRace,
+		skipRace: !!data.skipRace,
 	});
 
 	// load the track instance
@@ -59,6 +57,7 @@ export default async function setupAsTrack(target, data) {
 		const car = data.cars[i];
 		track.addPlayer({
 			id: `player_${i}`,
+			isPlayer: i === 0,
 			type: car.type,
 			lane: LANE_PATTERN[data.cars.length - 1][i],
 			hue: car.hue,

@@ -39,6 +39,7 @@ async function init() {
 	// prepare the view
 	const canvas = document.querySelector('#view > canvas');
 	const stats = new Stats();
+	stats.dom.id = 'fps-display'
 	
 	// add FPS tracking
 	// 0: fps, 1: ms, 2: mb

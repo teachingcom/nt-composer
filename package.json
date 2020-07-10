@@ -18,8 +18,8 @@
     "deploy:previewer": "yarn clean:previewer && npx parcel build --no-content-hash -t node -d ./dist -o server.js ./preview/server.js && npx parcel build --no-content-hash -t browser -d ./dist/client ./preview/index.html",
     "deploy:compiler": "yarn clean:compile && npx parcel build --no-content-hash -t node -d ./dist -o compile.js ./compile/index.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Teaching.com",
+  "license": "GNU GPLv3",
   "dependencies": {
     "@babel/core": "^7.9.0",
     "@babel/node": "^7.8.7",

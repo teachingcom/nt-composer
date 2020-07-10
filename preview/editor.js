@@ -62,6 +62,9 @@ export function parse(saveChanges) {
 	const namecards = [ ];
 	const comps = [ ];
 
+	// misc configs
+	const config = { };
+
 	// tracking the current car, if any
 	let car;
 	
@@ -71,6 +74,10 @@ export function parse(saveChanges) {
 		const lines = text.split(/\n/g);
 		for (let line of lines) {
 			line = line.replace(/^\//, '');
+
+			// check for configs
+			if (/silent/i.test(line))
+				config.silent = true;
 		
 			// choose the correct group
 			if (/^cars/.test(line)) {
@@ -96,7 +103,19 @@ export function parse(saveChanges) {
 
 			// track style
 			else if (/^tracks/.test(line)) {
-				tracks.push(line);
+
+				// check for a track
+				const [path, ...args] = line.split(/ +/g);
+				tracks.push(path);
+
+				// check for track configs
+				config.skipRace = !!~args.indexOf('instant');
+				config.slowRace = !!~args.indexOf('slow');
+				config.fastRace = !!~args.indexOf('fast');
+				config.noRace = !!~args.indexOf('no-race');
+				config.skipCountdown = !!~args.indexOf('no-countdown');
+				config.skipIntro = !!~args.indexOf('no-intro');
+				config.silent = !!~args.indexOf('silent');
 			}
 
 			// nitro effect
@@ -127,7 +146,7 @@ export function parse(saveChanges) {
 		}
 
 		// return the final object
-		return { seed, cars, tracks, trails, nitros, namecards, comps };
+		return { seed, cars, tracks, trails, nitros, namecards, comps, ...config };
 		
 	}
 	// couldn't parse the data
