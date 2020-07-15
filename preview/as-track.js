@@ -20,20 +20,21 @@ export default async function setupAsTrack(target, data) {
 		target,
 		manifest,
 		baseUrl: '/',
-		staticUrl: '/cars',
-		sfx: !!data.silent,
+		staticUrl: '/legacy',
+		sfx: !data.silent,
 		music: false
 	});
 
 	// create a simulator, if using it
 	track = new RaceSimulator(track, {
-		silent: !!data.silent,
 		noRace: !!data.noRace,
 		skipIntro: !!data.skipIntro,
 		skipCountdown: !!data.skipCountdown,
 		fastRace: !!data.fastRace,
 		slowRace: !!data.slowRace,
 		skipRace: !!data.skipRace,
+		loseRace: !!data.loseRace,
+		winRace: !!data.winRace,
 	});
 
 	// load the track instance

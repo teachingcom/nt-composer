@@ -109,8 +109,10 @@ export function parse(saveChanges) {
 				tracks.push(path);
 
 				// check for track configs
-				config.skipRace = !!~args.indexOf('instant');
+				config.skipRace = !!~args.indexOf('instant') || !!~args.indexOf('skip');
 				config.slowRace = !!~args.indexOf('slow');
+				config.loseRace = !!~args.indexOf('lose');
+				config.winRace = !!~args.indexOf('win');
 				config.fastRace = !!~args.indexOf('fast');
 				config.noRace = !!~args.indexOf('no-race');
 				config.skipCountdown = !!~args.indexOf('no-countdown');

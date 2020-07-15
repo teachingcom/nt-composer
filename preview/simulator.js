@@ -86,13 +86,16 @@ export class RaceSimulator {
 		const speeds = [ 5, 4.75, 4.5, 4.25, 4 ];
 		const { track, options } = this;
 		const { players } = track;
-		const { fastRace, slowRace, delayStart = 0 } = options;
+		const { fastRace, slowRace, winRace, loseRace, delayStart = 0 } = options;
 		
 		// track race state
 		const state = { };
 		
 		// setup each player
 		for (let i = 0; i < players.length; i++) {
+			const player = players[i];
+			const isPlayer = !!player.options?.isPlayer;
+			console.log(state);
 
 			// grab a speed to use
 			const index = 0 | (Math.random() * speeds.length);
@@ -101,6 +104,8 @@ export class RaceSimulator {
 			const speed = speeds[index];
 			if (slowRace) speed *= 0.25;
 			if (fastRace) speed *= 2.5;
+			if (winRace && isPlayer) speed *= 3.5;
+			if (loseRace && isPlayer) speed *= 0.25;
 
 			// don't allow more than one car to use it
 			speeds.splice(index, 1);
