@@ -6913,9 +6913,9 @@ npm-run-path@^4.0.0:
   dependencies:
     path-key "^3.0.0"
 
-"nt-animator@ssh://git@github.com/teachingcom/nt-animator":
+"nt-animator@https://github.com/teachingcom/nt-animator":
   version "1.0.0"
-  resolved "ssh://git@github.com/teachingcom/nt-animator#8b0c7dfb69ed943ec5329f2621a4c4a3a3dd7ebf"
+  resolved "https://github.com/teachingcom/nt-animator#ae4f76ce78c873bddf2ef2a7963d63d55bb1e01d"
   dependencies:
     clone-deep "^4.0.1"
     deep-defaults "^1.0.5"
@@ -6926,9 +6926,9 @@ npm-run-path@^4.0.0:
     popmotion "^8.7.1"
     random-seed "^0.3.0"
 
-"nt-track@ssh://git@github.com/teachingcom/nt-track":
+"nt-track@https://github.com/teachingcom/nt-track":
   version "1.0.0"
-  resolved "ssh://git@github.com/teachingcom/nt-track#af1c40ffbbe504f08f7b2cd2df8dd9229035d644"
+  resolved "https://github.com/teachingcom/nt-track#6c2bd5f7b1e323598da9a6d65ed7eda08942be1c"
   dependencies:
     clone-deep "^4.0.1"
     deep-defaults "^1.0.5"

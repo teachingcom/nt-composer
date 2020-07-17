@@ -4,13 +4,15 @@ import path from 'path';
 import Spritesmith from 'spritesmith';
 import compressImages from 'compress-images';
 
+import COMPRESSION_PARAMS from './compression.json';
 import { fileToKey, asyncCallback, timeout } from './utils.js';
 import paths from './paths.js';
 import * as cache from './cache.js';
 
 // compression args
-const JPG_COMPRESSION_ARGS = ['-quality', '100'];
-const PNG_COMPRESSION_ARGS = [256, '-f', '--strip', '--skip-if-larger'];
+const { jpeg_quality, png_max_palette_colors } = COMPRESSION_PARAMS;
+const JPG_COMPRESSION_ARGS = ['-quality', jpeg_quality];
+const PNG_COMPRESSION_ARGS = [png_max_palette_colors, '-f', '--strip', '--skip-if-larger'];
 
 export async function generateSpritesheet(spritesheets, nodeId, spritesheetName, subdir, images) {
 	const { OUTPUT_DIR } = paths;
@@ -52,6 +54,11 @@ export async function generateSpritesheet(spritesheets, nodeId, spritesheetName,
 		spritesheets[spritesheetId] = existing;
 		return;
 	}
+
+	// notify of params
+	console.log(`Compression Params
+	jpeg_quality           : ${jpeg_quality}
+	png_max_palette_colors : ${png_max_palette_colors}`);
 
 	// save the new spritesheet location
 	const sprites = spritesheets[spritesheetId] = { };

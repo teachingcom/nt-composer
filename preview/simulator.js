@@ -95,7 +95,6 @@ export class RaceSimulator {
 		for (let i = 0; i < players.length; i++) {
 			const player = players[i];
 			const isPlayer = !!player.options?.isPlayer;
-			console.log(state);
 
 			// grab a speed to use
 			const index = 0 | (Math.random() * speeds.length);
