@@ -102,7 +102,7 @@ export class RaceSimulator {
 			// grab a speed value to use
 			const speed = speeds[index];
 			if (slowRace) speed *= 0.25;
-			if (fastRace) speed *= 2.5;
+			if (fastRace) speed *= 1.5;
 			if (winRace && isPlayer) speed *= 3.5;
 			if (loseRace && isPlayer) speed *= 0.25;
 
