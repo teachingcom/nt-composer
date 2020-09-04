@@ -56,7 +56,7 @@ export async function generateSpritesheet(spritesheets, nodeId, spritesheetName,
 	}
 
 	// notify of params
-	console.log(`Compression Params
+	console.log(`New Compress Compression Params
 	jpeg_quality           : ${jpeg_quality}
 	png_max_palette_colors : ${png_max_palette_colors}`);
 
@@ -78,7 +78,7 @@ export async function generateSpritesheet(spritesheets, nodeId, spritesheetName,
 	// there seems to be some timing issues - give a moment to 
 	// settle down before compressing - ideally, we can just
 	// pipe results eventually
-	await timeout(2000);
+	await timeout(60000);
 
 	// verify the resource directory
 	const tmpId = _.snakeCase(spritesheetId);

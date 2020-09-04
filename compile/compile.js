@@ -9,7 +9,6 @@ import generateResource from './generate-resource.js';
 import generateResourcesFromDirectory from './generate-resource-from-dir.js';
 import scanDirectory from './scan-directory.js';
 import generateSoundsSpritesheet from './generate-sounds-spritesheet.js';
-import { compileProgressPath } from './compile-progress-path.js';
 
 // check if debugging mode should be used
 const DEBUG = !!~process.argv.indexOf('--debug');
@@ -71,12 +70,8 @@ export async function compile(inputDir, outputDir) {
 		});
 	});
 
-
 	// create the sounds, if needed
 	await generateSoundsSpritesheet(data);
-
-	// compile the path progress helper
-	data.progress = await compileProgressPath();
 
 	// include animation data
 	const animations = await fs.readFile(`${INPUT_DIR}/crowd/animations.json`);

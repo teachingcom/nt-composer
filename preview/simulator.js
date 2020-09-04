@@ -47,7 +47,10 @@ export class RaceSimulator {
 
 		// check for countdowns
 		if (skipCountdown) this.startRace();
-		else this.track.startCountdown();
+		else {
+			this.track.startCountdown();
+			setTimeout(this.startRace, 0 | (4000 + (Math.random() * 300)));
+		}
 	}
 
 	// immediately jumps to the finish animation
@@ -56,20 +59,34 @@ export class RaceSimulator {
 		const finished = _.shuffle(track.players);
 
 		// start the 
-		let playerIndex = Number.MAX_SAFE_INTEGER;
-		_.each(finished, (player, place) => {
-			const isPlayer = player.id === track.options.activePlayerId;
-			if (isPlayer) playerIndex = place;
+		let count = 0;
+		const now = +new Date;
+		_.each(finished, player => {
 
-			// late player, finish with a delay
-			if (place > playerIndex) {
-				const delay = (place - playerIndex) * 1500;
-				setTimeout(() => track.finishRace(player, place), delay);
-			}
-			// player or already finished player
-			else {
-				track.finishRace(player, place, !isPlayer);
-			}
+			// get the final progress update
+			const delay = ++count * 500;
+			const completed = now + (instant ? (0 | (Math.random() * 300)) : delay);
+			const instant = Math.random() < 0.5 || player.isPlayer;
+			const result = {
+				progress: 100,
+				finished: true,
+				typed: 100,
+				typingSpeedModifier: 0,
+			};
+
+			// handle finishes
+			const finish = () => {
+				track.setProgress(player.id, result);
+				setTimeout(() => {
+					result.completed = completed;
+					track.setProgress(player.id, result);
+				}, 1000)
+			};
+			
+			// finalize the race
+			if (instant) finish();
+			else setTimeout(finish, delay);
+
 		});
 	}
 
@@ -116,19 +133,30 @@ export class RaceSimulator {
 				usedNitro: false
 			};
 		}
+
+		// the interval
+		let updater;
 		
 		// begins the race
 		setTimeout(() => {
 			track.startRace();
 
 			// bump each player forward
-			setInterval(() => {
+			updater = setInterval(() => {
 				let didNitro = false;
 
 				// nudge forward
+				let allFinished = true;
 				for (const id in state) {
 					const player = state[id];
-					player.progress += player.speed;
+					const completed = player.progress >= 100 ? +new Date : null;
+					const finished = !!completed;
+
+					// if this person is racing still
+					if (!finished) allFinished = false;
+
+					// increment progress
+					player.progress += 0 | Math.max(1, (player.speed * 2) * Math.random());
 
 					// check for nitros
 					if (!didNitro
@@ -140,8 +168,12 @@ export class RaceSimulator {
 					}
 
 					// update progress
-					track.setProgress(id, player.progress);
+					track.setProgress(id, { progress: player.progress, finished, completed });
 				}
+
+				// if all done
+				if (allFinished)
+					clearInterval(updater);
 
 			}, 1000);
 				

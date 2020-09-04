@@ -58,6 +58,10 @@ export async function serve(config) {
 	if (!config.dev) {
 		app.use(express.static(`${ROOT}/dist/client`));
 	}
+	// precompiled
+	else {
+		app.use(express.static(`${ROOT}/dist`));
+	}
 
 	// share the root to allow access to node_modules
 	// primarily to allow access to source maps
