@@ -12,9 +12,14 @@ import generateSoundsSpritesheet from './generate-sounds-spritesheet.js';
 
 // check if debugging mode should be used
 const DEBUG = !!~process.argv.indexOf('--debug');
+const VERSION = '1.0.1';
 
 /** handles compiling all resources in the repo folder */
 export async function compile(inputDir, outputDir) {
+	// it's somewhat difficult to ensure the composer is
+	// the correct version when used from different repos
+	// this will make it known which version is being run
+	console.log(`nt-composer: v${VERSION}`);
 	
 	// change the input/output directories
 	if (inputDir && outputDir) {
