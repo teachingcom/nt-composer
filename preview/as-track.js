@@ -13,11 +13,14 @@ const LANE_PATTERN = [ [2], [1,3], [2,0,4], [0,1,3,4], [0,1,2,3,4] ];
 export default async function setupAsTrack(target, data) {
 	const path = data.tracks.pop();
 	const manifest = getManifest();
+	
+	const container = target.parentNode;
+	container.innerHTML = '';
 
 	// create the track instance
 	let track = new Track();
 	await track.init({
-		target,
+		container,
 		manifest,
 		baseUrl: '/',
 		staticUrl: '/legacy',
@@ -62,7 +65,12 @@ export default async function setupAsTrack(target, data) {
 			type: car.type,
 			lane: LANE_PATTERN[data.cars.length - 1][i],
 			hue: car.hue,
-			mods: car.mods
+			mods: car.mods,
+			isFriend: Math.random() < 0.5,
+			isGold: Math.random() < 0.5,
+			isTop3: Math.random() < 0.5,
+			playerName: 'Guest Racer',
+			playerTeam: 'NT'
 		});
 	}
 

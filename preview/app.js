@@ -38,13 +38,12 @@ async function init() {
 
 	// prepare the view
 	const canvas = document.querySelector('#view > canvas');
-	// const stats = new Stats();
-	// stats.dom.id = 'fps-display'
 	
 	// // add FPS tracking
-	// // 0: fps, 1: ms, 2: mb
-	// stats.showPanel(0);
-	// document.body.appendChild(stats.dom);
+	const stats = new Stats();
+	stats.dom.id = 'fps-display'
+	stats.showPanel(0); // 0: fps, 1: ms, 2: mb
+	document.body.appendChild(stats.dom);
 
 	// view updating functions
 	let update = () => { };
@@ -83,18 +82,18 @@ async function init() {
 		}
 	});
 
-	setInterval(() => update(), 16);
+	// setInterval(() => update(), 16);
 
-	// // handle track rendering
-	// function refresh() {
-	// 	// stats.begin();
-	// 	update();
-	// 	// stats.end();
-	// 	requestAnimationFrame(refresh);
-	// }
+	// handle track rendering
+	function refresh() {
+		stats.begin();
+		update();
+		stats.end();
+		requestAnimationFrame(refresh);
+	}
 
-	// // start updating
-	// refresh();
+	// start updating
+	refresh();
 }
 
 // reads a socket message
