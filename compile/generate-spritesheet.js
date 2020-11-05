@@ -78,7 +78,7 @@ export async function generateSpritesheet(spritesheets, nodeId, spritesheetName,
 	// there seems to be some timing issues - give a moment to 
 	// settle down before compressing - ideally, we can just
 	// pipe results eventually
-	await timeout(5000);
+	await timeout(500);
 
 	// verify the resource directory
 	const tmpId = _.snakeCase(spritesheetId);

@@ -12,7 +12,7 @@ import generateSoundsSpritesheet from './generate-sounds-spritesheet.js';
 
 // check if debugging mode should be used
 const DEBUG = !!~process.argv.indexOf('--debug');
-const VERSION = '1.0.1';
+const VERSION = '1.0.2';
 
 /** handles compiling all resources in the repo folder */
 export async function compile(inputDir, outputDir) {
