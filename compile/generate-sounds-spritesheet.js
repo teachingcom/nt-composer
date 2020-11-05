@@ -23,7 +23,7 @@ export default async function generateSoundSprites(root) {
 		// filter out hidden files
 		if (/^\./i.test(entry)) continue;
 		
-		// check the file into
+		// check the file info
 		const file = path.resolve(input, entry);
 		const stat = await fs.stat(file);
 

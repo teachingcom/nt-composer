@@ -12,7 +12,7 @@ import generateSoundsSpritesheet from './generate-sounds-spritesheet.js';
 
 // check if debugging mode should be used
 const DEBUG = !!~process.argv.indexOf('--debug');
-const VERSION = '1.0.2';
+const VERSION = '1.0.3';
 
 /** handles compiling all resources in the repo folder */
 export async function compile(inputDir, outputDir) {
@@ -76,11 +76,11 @@ export async function compile(inputDir, outputDir) {
 	});
 
 	// create the sounds, if needed
-	await generateSoundsSpritesheet(data);
+	// await generateSoundsSpritesheet(data);
 
 	// include animation data
-	const animations = await fs.readFile(`${INPUT_DIR}/crowd/animations.json`);
-	data.crowd = JSON.parse(animations.toString());
+	// const animations = await fs.readFile(`${INPUT_DIR}/crowd/animations.json`);
+	// data.crowd = JSON.parse(animations.toString());
 
 	// save the completed file
 	const generated = JSON.stringify(data, null, DEBUG ? 2 : null);

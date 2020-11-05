@@ -2,6 +2,7 @@
 const path = require('path');
 const { program } = require('commander');
 const { serve } = require('../dist/server');
+const resources = path.resolve(__dirname, '../client');
 
 // attempt to run
 try {
@@ -21,7 +22,7 @@ try {
 		const output = path.resolve(program.output);
 		const port = 0 | program.port;
 		const dev = !!program.dev;
-		serve({ input, output, port, dev });
+		serve({ input, output, port, dev, resources });
 	}
 }
 catch (ex) {

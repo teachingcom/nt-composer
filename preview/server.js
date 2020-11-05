@@ -19,8 +19,8 @@ export async function serve(config) {
 
 	// get the root of the nt-composer module
 	// ???: search for package.json
-	const [ entry, script ] = process.argv;
-	ROOT = path.dirname(script);
+	// const [ entry, script ] = process.argv;
+	ROOT = path.dirname(config.resources);
 
 	// if this was called as a binary, we need to resolve to
 	// the root of the node module
