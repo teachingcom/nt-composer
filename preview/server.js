@@ -40,26 +40,27 @@ export async function serve(config) {
 	// create the bundler which is just serving
 	// the index html file
 	if (config.dev) {
-		console.log('[mode] using dev mode');
+		console.log('[mode] using dev mode2');
 		bundler = new Bundler(`${ROOT}/preview/index.html`, {
 			outDir: './.preview/client',
 			sourceMaps: true,
 			cache: false
 		});
 	}
-
+	
 	// create the app
 	const app = express();
-
+	
 	// communicate for websockets
 	configureWebSockets();
-
+	
 	// use pre-compiled track/animator
 	if (!config.dev) {
 		app.use(express.static(`${ROOT}/dist/client`));
 	}
 	// precompiled
 	else {
+		app.use(express.static('./.preview/client'));
 		app.use(express.static(`${ROOT}/dist`));
 	}
 
