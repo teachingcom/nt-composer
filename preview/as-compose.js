@@ -7,12 +7,14 @@ export default async function setupAsCompose(target, data) {
 
 	// always create a track
 	const view = new Composer();
+	const container = target.parentNode;
+	container.innerHTML = '';
 
 	// try and initialize the request
 	try {
 		await view.init({
 			baseHeight: 800,
-			target,
+			container,
 			manifest,
 			baseUrl: '/',
 			silent: !!data.silent
