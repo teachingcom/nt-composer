@@ -7282,7 +7282,6 @@ npm-run-path@^4.0.0:
     idb-keyval "^3.2.0"
     pixi-particles "^4.2.0"
     pixi.js "5.2.3"
-    pixi.js-legacy "5.2.3"
     popmotion "^8.7.1"
     random-seed "^0.3.0"
 
@@ -7976,23 +7975,6 @@ pixi-particles@^4.2.0:
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/pixi-particles/-/pixi-particles-4.2.1.tgz#b7858fc2f9d1f4fb754cf827dfc1c79c7df86048"
   integrity sha512-8Hp7HZU+hYFHVOAigLf4gzimDusDK1ecDGjnOsg5JhnBT9p7V1aNr6U7DuHyDnGGGk6IoLlovggx7/WEMNNe4A==
-
-pixi.js-legacy@5.2.3:
-  version "5.2.3"
-  resolved "https://registry.yarnpkg.com/pixi.js-legacy/-/pixi.js-legacy-5.2.3.tgz#53d0013cddd308313f5181ff29723e0958226db0"
-  integrity sha512-sq3GiVhrZw/WZJLybo/PdjPJTd+D4KGQ2UwZiX/cYjZbQrcpgb9b4KPzRRD2NC4KLzCMdjUpNLkh8rPCcBAwYA==
-  dependencies:
-    "@pixi/canvas-display" "5.2.3"
-    "@pixi/canvas-extract" "5.2.3"
-    "@pixi/canvas-graphics" "5.2.3"
-    "@pixi/canvas-mesh" "5.2.3"
-    "@pixi/canvas-particles" "5.2.3"
-    "@pixi/canvas-prepare" "5.2.3"
-    "@pixi/canvas-renderer" "5.2.3"
-    "@pixi/canvas-sprite" "5.2.3"
-    "@pixi/canvas-sprite-tiling" "5.2.3"
-    "@pixi/canvas-text" "5.2.3"
-    pixi.js "5.2.3"
 
 pixi.js@5.2.3:
   version "5.2.3"

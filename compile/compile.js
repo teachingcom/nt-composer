@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import fs from 'fs-extra'
 import path from 'path'
 import * as cache from './cache.js'
@@ -9,10 +8,11 @@ import generateResource from './generate-resource.js'
 import generateResourcesFromDirectory from './generate-resource-from-dir.js'
 import scanDirectory from './scan-directory.js'
 import generateSoundsSpritesheet from './generate-sounds-spritesheet.js'
+import splitManifest from './splitManifest.js'
 
 // check if debugging mode should be used
 const DEBUG = !!~process.argv.indexOf('--debug')
-const VERSION = '1.1.2'
+const VERSION = '1.1.5'
 
 /** handles compiling all resources in the repo folder */
 export async function compile (inputDir, outputDir) {
@@ -77,12 +77,11 @@ export async function compile (inputDir, outputDir) {
   // create the sounds, if needed
   await generateSoundsSpritesheet(data)
 
-  // include animation data
-  // const animations = await fs.readFile(`${INPUT_DIR}/crowd/animations.json`);
-  // data.crowd = JSON.parse(animations.toString());
+  // break up non-required manifest data
+  await splitManifest({ manifest: data, outputDir: OUTPUT_DIR })
 
   // save the completed file
-  const generated = JSON.stringify(data, null, DEBUG ? 2 : null)
+  const output = JSON.stringify(data, null, DEBUG ? 2 : null)
   console.log(`[export] ${exported}`)
-  await fs.writeFile(exported, generated)
+  await fs.writeFile(exported, output)
 }

@@ -16,7 +16,10 @@
     "compile": "node ./bin/nt-compile.js",
     "deploy": "yarn clean && yarn deploy:previewer && yarn deploy:compiler",
     "deploy:previewer": "yarn clean:previewer && npx parcel build --no-content-hash -t node -d ./dist -o server.js ./preview/server.js && npx parcel build --no-content-hash -t browser -d ./dist/client ./preview/index.html",
-    "deploy:compiler": "yarn clean:compile && npx parcel build --no-content-hash -t node -d ./dist -o compile.js ./compile/index.js"
+    "deploy:compiler": "yarn clean:compile && npx parcel build --no-content-hash -t node -d ./dist -o compile.js ./compile/index.js",
+    "dev:compiler": "nodemon -w ./compile -e \"js\" --exec \"yarn deploy\"",
+    "dev:previewer": "nodemon -w ./preview -e \"js\" --exec \"yarn deploy:previewer\"",
+    "dev": "concurrently \"yarn dev:compiler\" \"yarn dev:previewer\""
   },
   "author": "Teaching.com",
   "license": "GPL-3.0-or-later",

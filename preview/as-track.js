@@ -22,8 +22,7 @@ export default async function setupAsTrack(target, data) {
 	await track.init({
 		container,
 		manifest,
-		baseUrl: '/',
-		staticUrl: '/legacy',
+		baseUrl: `${window.location.origin}/`,
 		sfx: !data.silent,
 		music: false
 	});
@@ -66,9 +65,10 @@ export default async function setupAsTrack(target, data) {
 			lane: LANE_PATTERN[data.cars.length - 1][i],
 			hue: car.hue,
 			mods: car.mods,
+			isAnimated: true,
 			isFriend: Math.random() < 0.5,
 			isGold: Math.random() < 0.5,
-			isTop3: Math.random() < 0.5,
+			playerRank: 0 | Math.random() < 2500,
 			playerName: 'Guest Racer',
 			playerTeam: 'NT'
 		});
