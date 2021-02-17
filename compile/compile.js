@@ -12,7 +12,7 @@ import splitManifest from './splitManifest.js'
 
 // check if debugging mode should be used
 const DEBUG = !!~process.argv.indexOf('--debug')
-const VERSION = '1.1.5'
+const VERSION = '1.1.6'
 
 /** handles compiling all resources in the repo folder */
 export async function compile (inputDir, outputDir) {
@@ -76,6 +76,10 @@ export async function compile (inputDir, outputDir) {
 
   // create the sounds, if needed
   await generateSoundsSpritesheet(data)
+
+  // save a version number to force manifest files
+  // to reload with
+  data.version = Date.now().toString('16')
 
   // break up non-required manifest data
   await splitManifest({ manifest: data, outputDir: OUTPUT_DIR })
