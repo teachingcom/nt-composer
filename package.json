@@ -47,7 +47,7 @@
     "imagemin-mozjpeg": "^9.0.0",
     "imagemin-pngquant": "^9.0.0",
     "js-yaml": "^3.13.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "node-lame": "^1.2.2",
     "nodemon": "^2.0.3",
     "nt-animator": "ssh://git@github.com:/teachingcom/nt-animator",
