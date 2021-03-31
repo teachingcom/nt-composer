@@ -12,7 +12,7 @@ import splitManifest from './splitManifest.js'
 
 // check if debugging mode should be used
 const DEBUG = !!~process.argv.indexOf('--debug')
-const VERSION = '1.1.6'
+const VERSION = '1.1.8'
 
 /** handles compiling all resources in the repo folder */
 export async function compile (inputDir, outputDir) {
