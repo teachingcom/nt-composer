@@ -80,8 +80,8 @@ export default async function setupAsTrack(target, data) {
 
 	// handling nitro effects
 	const activateNitro = () => {
-		const index = 0 | (Math.random() * track.players.length);
-		track.activateNitro(track.players[index].id);
+		const index = 0 | (Math.random() * data.cars.length);
+		track.track.activateNitro(`player_${index}`);
 	};
 
 	return { update, resize, activateNitro };

@@ -3,35 +3,97 @@ import path from 'path'
 import fluent from 'fluent-ffmpeg'
 import audiosprite from 'audiosprite'
 import paths from './paths.js'
+import glob from 'glob'
 import { equalFiles } from 'file-sync-cmp'
+import { asyncCallback } from './utils.js'
 
 const isMP3 = path => /\.mp3$/i.test(path)
 
-export default async function generateSoundSprites (root) {
+export default async function generateSoundSprites (root, cache) {
+  // check for new sounds to compile
+  const hasUpdatedSounds = await checkForUpdatedSounds(cache)
+  if (!hasUpdatedSounds) {
+    root.sounds = cache.data.sounds
+    return
+  }
+
+  root.sounds = { }
+
+  // find all collections of audio
+  const { INPUT_DIR } = paths
+  const dir = 'sounds/collections'
+  const collections = path.resolve(INPUT_DIR, dir)
+  const items = await fs.readdir(collections);
+
+  // generate each unique sound spritesheet
+  for (const name of items) {
+    const location = path.resolve(collections, name)
+    const stat = await fs.stat(location)
+    if (stat.isDirectory() && !/^\./.test(name)) {
+      await generateCollectionSoundSprites(root, name, location)
+    }
+  }
+
+  // copy other individual sounds
+  // await copyIndividualSounds(root)
+}
+
+async function checkForUpdatedSounds(cache) {
+  const { INPUT_DIR } = paths
+  const files = await asyncCallback(glob, `${INPUT_DIR}/sounds/**/*.mp3`)
+  
+  // find the latest timestamp
+  const ts = parseInt(cache.data?.version, '16')
+
+  // see if anything is newer
+  for (const file of files) {
+    const stat = fs.statSync(file)
+    if (stat.mtimeMs > ts) {
+      return true
+    }
+  }
+
+  // nothing new
+  return false
+}
+
+async function copyIndividualSounds(root) {
   const { INPUT_DIR, OUTPUT_DIR } = paths
   const dir = 'sounds'
-  const input = path.resolve(INPUT_DIR, dir)
+  const collections = path.resolve(INPUT_DIR, dir)
+  const items = await fs.readdir(collections);
+
+  // generate each unique sound spritesheet
+  for (const name of items) {
+    const location = path.resolve(collections, name)
+    const stat = await fs.stat(location)
+    if (stat.isDirectory() && name !== 'collections' && !/^\./.test(name)) {
+      await copyMP3s(root, location);
+    }
+  }
+}
+
+async function generateCollectionSoundSprites(root, name, location) {
+  const { OUTPUT_DIR } = paths
 
   // collect possible sprites
   const files = []
-  const entries = await fs.readdir(input)
+  const entries = await fs.readdir(location)
   for (const entry of entries) {
     // filter out hidden files
     if (/^\./i.test(entry)) continue
 
     // check the file info
-    const file = path.resolve(input, entry)
-    const stat = await fs.stat(file)
+    const file = path.resolve(location, entry)
 
     // if is an mp3 file
     if (isMP3(file)) {
       files.push(file)
-
-    // is a directory, then just copy the files
-    } else if (stat.isDirectory()) {
-      await copyMP3s(`${dir}/${entry}`)
     }
   }
+  
+  // create the sound record
+  const record = root.sounds[name] = { }
 
   // check for required files
   return new Promise((resolve, reject) => {
@@ -39,7 +101,7 @@ export default async function generateSoundSprites (root) {
     const output = path.resolve(OUTPUT_DIR, 'sounds')
     const options = {
       gap: 0.5,
-      output: `${tmp}/common`
+      output: `${tmp}/${name}`
     }
 
     // create the spritesheet
@@ -49,21 +111,20 @@ export default async function generateSoundSprites (root) {
       }
 
       // map all audio files
-      root.sounds = { }
       for (const id in generated.spritemap) {
         const sound = generated.spritemap[id]
-        root.sounds[id] = [0 | sound.start * 1000, 0 | (sound.end - sound.start) * 1000]
+        record[id] = [0 | sound.start * 1000, 0 | (sound.end - sound.start) * 1000]
       }
 
       // compare the spritesheets to determine if they
       // changed, and if so, update the timestamp
-      const source = `${tmp}/common.mp3`
-      const compare = `${output}/common.mp3`
+      const source = `${tmp}/${name}.mp3`
+      const compare = `${output}/${name}.mp3`
       const hasExisting = fs.existsSync(compare)
       const same = hasExisting && equalFiles(source, compare)
       if (!same) {
-        root.sounds.version = Date.now().toString('16')
-        console.log('[audio] updated version: common.mp3')
+        record.version = Date.now().toString('16')
+        console.log(`[audio] updated version: ${name}.mp3`)
 
         // copy and compress each
         const files = fs.readdirSync(tmp)
@@ -80,7 +141,7 @@ export default async function generateSoundSprites (root) {
 }
 
 // copy and compress each MP3 in a directory
-async function copyMP3s(dir) {
+async function copyMP3s(root, dir) {
   const { INPUT_DIR, OUTPUT_DIR } = paths
   const input = path.resolve(INPUT_DIR, dir)
   const output = path.resolve(OUTPUT_DIR, dir)
@@ -95,12 +156,15 @@ async function copyMP3s(dir) {
     if (!exists) await fs.mkdirp(output)
 
     // copy the file
+    const key = `${dir}/${entry}`;
     const source = path.resolve(input, entry)
     const target = path.resolve(output, entry)
+    const stat = await fs.stat(source)
 
     // copy the compressed version
+    root.sounds[key] = stat.mtime.toString('16')
     await copyAndCompressAudio(source, target)
-    console.log(`[audio] ${dir}/${entry}`)
+    console.log(`[audio] ${key}`)
   }
 }
 

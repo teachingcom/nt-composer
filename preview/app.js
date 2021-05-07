@@ -77,8 +77,9 @@ async function init() {
 	// special events
 	window.addEventListener('keyup', event => {
 		if (document.activeElement?.id === 'paths') return;
-		switch (event.which) {
-			case 84: activateNitro()
+		switch (event.key) {
+			case 'n': activateNitro()
+			default: console.warn('unhandled key', event.key)
 		}
 	});
 

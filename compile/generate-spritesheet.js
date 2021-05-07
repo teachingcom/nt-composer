@@ -8,6 +8,7 @@ import COMPRESSION_PARAMS from './compression.json'
 import { fileToKey, asyncCallback, timeout } from './utils.js'
 import paths from './paths.js'
 import * as cache from './cache.js'
+import { createSpritePaddedSpritesheet } from './create-sprite-padded-spritesheet'
 
 // compression args
 const { jpeg_quality, png_max_palette_colors } = COMPRESSION_PARAMS
@@ -73,7 +74,7 @@ export async function generateSpritesheet (spritesheets, nodeId, spritesheetName
   // generate JPGs
   if (hasJpgs) {
     sprites.hasJpg = true
-    await createSpritesheetFromImages(spritesheetId, sprites, jpgs, jpgPath)
+    await createSpritesheetFromImages(spritesheetId, sprites, jpgs, jpgPath, true)
   }
 
   // there seems to be some timing issues - give a moment to
@@ -122,17 +123,12 @@ export async function generateSpritesheet (spritesheets, nodeId, spritesheetName
 }
 
 // updates the spritesheet with image names
-async function createSpritesheetFromImages (spritesheetId, sprites, images, saveTo) {
-
-  // this is not ideal, but for some reason
-  // padding on tracks actually creates tears in
-  // the road - this is a temp fix
-  const isTrack = /tracks\//.test(saveTo)
-  const padding = isTrack ? 0 : 3
+async function createSpritesheetFromImages (spritesheetId, sprites, images, saveTo, useSpriteAsPadding) {
+  const padding = 2
 
   // convert to a spritesheet
   const src = _.map(images, item => item.path)
-  const { image, coordinates } = await asyncCallback(Spritesmith.run, { padding, src })
+  const { image, coordinates, properties } = await asyncCallback(Spritesmith.run, { padding, src })
   const ext = path.extname(saveTo).substr(1)
 
   // simplify the output format
@@ -154,7 +150,15 @@ async function createSpritesheetFromImages (spritesheetId, sprites, images, save
   const dir = `${path.dirname(saveTo)}/_${tmpId}`
   const target = `${dir}/${path.basename(saveTo)}`
   await fs.mkdirp(dir)
-  await fs.writeFile(target, image, 'binary')
+
+  // create the padded version
+  if (useSpriteAsPadding) {
+    await createSpritePaddedSpritesheet(target, properties.width, properties.height, coordinates, padding)
+  }
+  // use the normal image
+  else {
+    await fs.writeFile(target, image, 'binary')
+  }
 }
 
 // check the last modified time for a file, if it exists
