@@ -12,7 +12,7 @@ const LANE_PATTERN = [ [2], [1,3], [2,0,4], [0,1,3,4], [0,1,2,3,4] ];
 // create cars and a track
 export default async function setupAsTrack(target, data) {
 	const path = data.tracks.pop();
-	const manifest = getManifest();
+	const manifest = await getManifest();
 	
 	const container = target.parentNode;
 	container.innerHTML = '';

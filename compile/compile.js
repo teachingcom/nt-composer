@@ -2,6 +2,7 @@ import fs from 'fs-extra'
 import path from 'path'
 import * as cache from './cache.js'
 import paths, { replacePaths } from './paths.js'
+import crypto from 'crypto'
 
 // resource generation approaches
 import generateResource from './generate-resource.js'
@@ -12,7 +13,7 @@ import splitManifest from './splitManifest.js'
 
 // check if debugging mode should be used
 const DEBUG = !!~process.argv.indexOf('--debug')
-const VERSION = '1.1.9'
+const VERSION = '1.2.0'
 
 /** handles compiling all resources in the repo folder */
 export async function compile (inputDir, outputDir) {
@@ -25,6 +26,10 @@ export async function compile (inputDir, outputDir) {
   if (inputDir && outputDir) {
     replacePaths(inputDir, outputDir)
   }
+
+
+  // create a keymap for local development
+  await generateKeyMap()
 
   // prepare the data
   const { INPUT_DIR, OUTPUT_DIR } = paths
@@ -88,4 +93,38 @@ export async function compile (inputDir, outputDir) {
   const output = JSON.stringify(data, null, DEBUG ? 2 : null)
   console.log(`[export] ${exported}`)
   await fs.writeFile(exported, output)
+}
+
+
+async function generateKeyMap() {
+  const { INPUT_DIR, OUTPUT_DIR } = paths
+
+  const mapping = { };
+  const sources = { trail: 'trails', cars: 'cars' }
+  for (const key in sources) {
+    const src = sources[key]
+    mapping[src] = { }
+
+    const dir = path.resolve(`${INPUT_DIR}/${src}`)
+    const files = await fs.readdir(dir)
+    for (const file of files) {
+      
+      // verify this is an actual resource
+      const config = `${dir}/${file}/index.yml`;
+      if (!fs.existsSync(config)) {
+        console.log('not', config)
+        continue
+      }
+
+      // save the mapping
+      const ref = `${key}/${file}`
+      const hash = crypto.createHash('sha1').update(ref).digest('hex')
+      mapping[src][hash] = file
+    }
+  }
+
+  // save the result
+  const output = path.resolve(`${OUTPUT_DIR}/mapping.json`)
+  const data = JSON.stringify(mapping)
+  await fs.writeFile(output, data)
 }

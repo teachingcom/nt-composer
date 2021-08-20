@@ -1,7 +1,6 @@
 import editor from './editor';
 import Stats from 'stats.js';
 import Socket from 'simple-websocket';
-import { loadManifest } from './manifest';
 
 // view types
 import setupAsTrack from './as-track';
@@ -10,9 +9,6 @@ import toast from './toast';
 
 // reload page content
 async function init() {
-
-	// requires the player manifest
-	await loadManifest();
 
 	// listen for changes from a websocket --
 	// any data coming down is enough to know to refresh

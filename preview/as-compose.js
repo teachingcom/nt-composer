@@ -3,7 +3,7 @@ import { Composer } from 'nt-track';
 import getManifest from './manifest';
 
 export default async function setupAsCompose(target, data) {
-	const manifest = getManifest();
+	const manifest = await getManifest();
 
 	// always create a track
 	const view = new Composer();

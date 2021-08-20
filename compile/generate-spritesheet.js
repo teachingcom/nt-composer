@@ -9,6 +9,7 @@ import { fileToKey, asyncCallback, timeout } from './utils.js'
 import paths from './paths.js'
 import * as cache from './cache.js'
 import { createSpritePaddedSpritesheet } from './create-sprite-padded-spritesheet'
+import crypto from 'crypto';
 
 // compression args
 const { jpeg_quality, png_max_palette_colors } = COMPRESSION_PARAMS
@@ -17,10 +18,24 @@ const PNG_COMPRESSION_ARGS = [png_max_palette_colors, '-f', '--strip', '--skip-i
 
 export async function generateSpritesheet (spritesheets, nodeId, spritesheetName, subdir, images) {
   const { OUTPUT_DIR } = paths
-  const spritesheetId = `${subdir}${spritesheetName || nodeId}`
+  const src = `${subdir}${spritesheetName || nodeId}`
+
+  // check if requires obfuscation
+  let key = src;
+  if (/^(cars|trails)/.test(src)) {
+
+    // need to rename some paths to match
+    // item types in the game
+    key = key.replace(/^trails/, 'trail')
+      .replace(/^nitros/, 'nitro')
+      .replace(/^namecards/, 'namecard')
+
+    // the hashed version
+    key = crypto.createHash('sha1').update(key).digest('hex')
+  }
 
   // get the possible paths
-  const basePath = path.resolve(`${OUTPUT_DIR}/${spritesheetId}`)
+  const basePath = path.resolve(`${OUTPUT_DIR}/${src}`)
   const pngPath = `${basePath}.png`
   const jpgPath = `${basePath}.jpg`
 
@@ -47,12 +62,12 @@ export async function generateSpritesheet (spritesheets, nodeId, spritesheetName
   }
 
   // check and make sure the prior data is available
-  const existing = _.get(cache.data, 'spritesheets', { })[spritesheetId]
+  const existing = _.get(cache.data, 'spritesheets', { })[key]
 
   // if it's not expired and we have the old info then
   // we can just reuse it
   if (!expired && existing) {
-    spritesheets[spritesheetId] = existing
+    spritesheets[key] = existing
     return
   }
 
@@ -62,19 +77,19 @@ export async function generateSpritesheet (spritesheets, nodeId, spritesheetName
   png_max_palette_colors : ${png_max_palette_colors}`)
 
   // save the new spritesheet location
-  const sprites = spritesheets[spritesheetId] = { }
+  const sprites = spritesheets[key] = { }
   sprites.version = Date.now().toString(16)
 
   // generate PNGs
   if (hasPngs) {
     sprites.hasPng = true
-    await createSpritesheetFromImages(spritesheetId, sprites, pngs, pngPath)
+    await createSpritesheetFromImages(src, sprites, pngs, pngPath)
   }
 
   // generate JPGs
   if (hasJpgs) {
     sprites.hasJpg = true
-    await createSpritesheetFromImages(spritesheetId, sprites, jpgs, jpgPath, true)
+    await createSpritesheetFromImages(src, sprites, jpgs, jpgPath, true)
   }
 
   // there seems to be some timing issues - give a moment to
@@ -83,7 +98,7 @@ export async function generateSpritesheet (spritesheets, nodeId, spritesheetName
   await timeout(500)
 
   // verify the resource directory
-  const tmpId = _.snakeCase(spritesheetId)
+  const tmpId = _.snakeCase(src)
   const resourceDir = `dist${path.dirname(basePath).substr(OUTPUT_DIR.length)}`
   const tmpDir = `${resourceDir}/_${tmpId}`
   await fs.mkdirp(resourceDir)
