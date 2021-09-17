@@ -41,6 +41,7 @@ export default async function getManifest() {
 			const data = manifest.spritesheets[hash]
 
 			// ensure the object is available
+			delete manifest.spritesheets[hash]
 			manifest[category] = manifest[category] || { }
 
 			// map the object

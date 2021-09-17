@@ -22,7 +22,7 @@ export async function generateSpritesheet (spritesheets, nodeId, spritesheetName
 
   // check if requires obfuscation
   let key = src;
-  if (/^(cars|trails)/.test(src)) {
+  if (/^(cars|trails|nitros)/.test(src)) {
 
     // need to rename some paths to match
     // item types in the game

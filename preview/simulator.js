@@ -33,7 +33,12 @@ export class RaceSimulator {
 	ready = () => {
 		const { options } = this;
 		const { skipRace } = options;
-		if (skipRace) this.immediateFinish();
+		if (skipRace) {
+			this.immediateFinish();
+			setTimeout(() => {
+				this.track.simulateFinish();
+			}, 2000)
+		}
 		else this.simulateRace();
 	};
 
