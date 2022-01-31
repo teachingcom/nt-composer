@@ -61,6 +61,13 @@ export async function generateSpritesheet (spritesheets, nodeId, spritesheetName
     expired = expired || item.lastModified > lastGenerated
   }
 
+  // check if forcing a release
+  // TODO: maybe move outside of this function
+  if (/release/i.test(process.argv)) {
+    console.log('[release] force generate', key)
+    expired = true;
+  }
+
   // check and make sure the prior data is available
   const existing = _.get(cache.data, 'spritesheets', { })[key]
 
