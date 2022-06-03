@@ -48,7 +48,7 @@
     "imagemin-mozjpeg": "^9.0.0",
     "imagemin-pngquant": "^9.0.0",
     "js-yaml": "^3.13.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "node-glob": "^1.2.0",
     "node-lame": "^1.2.2",
     "nodemon": "^2.0.3",
