@@ -33,7 +33,8 @@ async function init() {
 	});
 
 	// prepare the view
-	const canvas = document.querySelector('#view > canvas');
+	const canvas = document.createElement('canvas'); 
+	document.querySelector('#view').appendChild(canvas);
 	
 	// // add FPS tracking
 	const stats = new Stats();
@@ -103,3 +104,6 @@ function getMessage(bytes) {
 
 // initialize
 window.addEventListener('load', init);
+
+// for reload testing
+window.INIT_TRACK = init;

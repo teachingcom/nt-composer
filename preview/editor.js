@@ -35,6 +35,19 @@ function commit() {
 export function init(onChange) {
 	handleChange = onChange;
 
+	// create the reset button
+	const reset = document.createElement('button');
+	reset.setAttribute('id', 'reload');
+	reset.textContent = 'Reload';
+	document.body.appendChild(reset);
+
+	// handle resetting
+	reset.addEventListener('click', async () => { 
+		await window.ACTIVE_TRACK?.dispose(true);
+		window.INIT_TRACK();
+		await window.ACTIVE_TRACK?.fadeIn();
+	});
+
 	// setup the editor
 	const paths = getElement();
 	paths.contentEditable = true;
@@ -78,6 +91,10 @@ export function parse(saveChanges) {
 			// check for configs
 			if (/silent/i.test(line))
 				config.silent = true;
+
+			// check for configs
+			if (/spectator/i.test(line))
+				config.isSpectator = true;
 		
 			// choose the correct group
 			if (/^cars/.test(line)) {

@@ -100,3 +100,21 @@ div.debug {
 #track-scrubber:hover {
 	opacity: 1 !important;
 }
+
+#reload {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	background: rgba(0, 0, 0, 0.8);
+	color: white;
+	border: none;
+	font-size: 12px;
+	opacity: 0.1;
+	transition: opacity 0.4s;
+	padding: 10px 15px;
+	cursor: pointer;
+}
+
+#reload:hover {
+	opacity: 1;
+}

@@ -27,6 +27,14 @@ export default async function setupAsTrack(target, data) {
 		music: false
 	});
 
+	// for local testing purposes
+	if (window.ACTIVE_TRACK) {
+		track.fadeIn();	
+	}
+
+	// save the track instance for reload testing
+	window.ACTIVE_TRACK = track;
+
 	// create a simulator, if using it
 	track = new RaceSimulator(track, {
 		noRace: !!data.noRace,
@@ -44,10 +52,22 @@ export default async function setupAsTrack(target, data) {
 		const parts = path.split(/\//g);
 		const [__, trackId, variantId] = parts;
 		const src = track.animator.lookup(path);
-		const seed = src.seed || data.seed || 'nitro';
+
+		// determine the seed to use
+		let seed = src?.seed || data.seed || 'nitro';
+
+		// just in case testing random tracks
+		if (/random/i.test(trackId)) {
+			seed = Math.random().toString('16');
+		}
 		
 		// initalize these values
-		await track.setTrack({ seed, trackId, variantId });
+		await track.setTrack({
+			seed,
+			trackId,
+			variantId,
+			spectator: data.isSpectator
+		});
 	}
 	// failed to create
 	catch (ex) {
