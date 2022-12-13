@@ -37,7 +37,7 @@
     "commander": "^5.1.0",
     "compress-images": "^1.7.8",
     "concurrently": "^5.2.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "file-sync-cmp": "^0.1.1",
     "fluent-ffmpeg": "^2.1.2",
     "fs-extra": "^9.0.0",
