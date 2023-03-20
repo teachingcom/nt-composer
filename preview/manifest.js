@@ -38,7 +38,7 @@ export default async function getManifest() {
 	for (const category in mapping) {
 		for (const hash in mapping[category]) {
 			const key = mapping[category][hash]
-			const data = manifest.spritesheets[hash]
+			const data = manifest.spritesheets[hash] || manifest.spritesheets[`${category}/${key}`]
 
 			// ensure the object is available
 			delete manifest.spritesheets[hash]
@@ -49,6 +49,6 @@ export default async function getManifest() {
 		}
 	}
 
-	window.NT = { manifest };
+	window.NT = { manifest, mapping };
 	return manifest;
 };

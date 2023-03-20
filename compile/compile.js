@@ -10,10 +10,11 @@ import generateResourcesFromDirectory from './generate-resource-from-dir.js'
 import scanDirectory from './scan-directory.js'
 import generateSoundsSpritesheet from './generate-sounds-spritesheet.js'
 import splitManifest from './splitManifest.js'
+import { ASSET_TYPE_SOURCES, normalizeAssetTypeName, normalizePublicKeyName } from './consts.js'
 
 // check if debugging mode should be used
 const DEBUG = !!~process.argv.indexOf('--debug')
-const VERSION = '1.2.1'
+const VERSION = '1.5.2'
 
 /** handles compiling all resources in the repo folder */
 export async function compile (inputDir, outputDir) {
@@ -26,10 +27,6 @@ export async function compile (inputDir, outputDir) {
   if (inputDir && outputDir) {
     replacePaths(inputDir, outputDir)
   }
-
-
-  // create a keymap for local development
-  await generateKeyMap()
 
   // prepare the data
   const { INPUT_DIR, OUTPUT_DIR } = paths
@@ -59,7 +56,8 @@ export async function compile (inputDir, outputDir) {
   await generateResourcesFromDirectory(data, data.intro, 'intros', { })
   await generateResourcesFromDirectory(data, data.nitros, 'nitros', { })
   await generateResourcesFromDirectory(data, data.cars, 'cars', { })
-  await generateResourcesFromDirectory(data, data.namecards, 'namecards', { })
+  await generateResourcesFromDirectory(data, data.nametags, 'nametags', { })
+  await generateResourcesFromDirectory(data, data.fanfare, 'fanfare', { })
   await generateResourcesFromDirectory(data, data.extras, 'extras', { })
 
   // tracks have variations so each directory should
@@ -89,6 +87,9 @@ export async function compile (inputDir, outputDir) {
   // break up non-required manifest data
   await splitManifest({ manifest: data, outputDir: OUTPUT_DIR })
 
+  // create a keymap for local development
+  await generateKeyMap()
+
   // save the completed file
   const output = JSON.stringify(data, null, DEBUG ? 2 : null)
   console.log(`[export] ${exported}`)
@@ -99,8 +100,8 @@ export async function compile (inputDir, outputDir) {
 async function generateKeyMap() {
   const { INPUT_DIR, OUTPUT_DIR } = paths
 
-  const mapping = { };
-  const sources = { trail: 'trails', cars: 'cars' }
+  const mapping = { }
+  const sources = ASSET_TYPE_SOURCES
   for (const key in sources) {
     const src = sources[key]
     mapping[src] = { }
@@ -110,14 +111,14 @@ async function generateKeyMap() {
     for (const file of files) {
       
       // verify this is an actual resource
-      const config = `${dir}/${file}/index.yml`;
+      const config = `${dir}/${file}/index.yml`
       if (!fs.existsSync(config)) {
         console.log('not', config)
         continue
       }
 
       // save the mapping
-      const ref = `${key}/${file}`
+      const ref = `${normalizePublicKeyName(normalizeAssetTypeName(key))}/${file}`
       const hash = crypto.createHash('sha1').update(ref).digest('hex')
       mapping[src][hash] = file
     }

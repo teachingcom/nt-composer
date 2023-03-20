@@ -38,14 +38,26 @@ export default async function setupAsTrack(target, data) {
 	// create a simulator, if using it
 	track = new RaceSimulator(track, {
 		noRace: !!data.noRace,
-		skipIntro: !!data.skipIntro,
-		skipCountdown: !!data.skipCountdown,
+		skipIntro: !!data.skipIntro || !!data.midRace,
+		midRace: !!data.midRace,
+		skipCountdown: !!data.skipCountdown || !!data.midRace,
 		fastRace: !!data.fastRace,
 		slowRace: !!data.slowRace,
 		skipRace: !!data.skipRace,
 		loseRace: !!data.loseRace,
 		winRace: !!data.winRace,
 	});
+
+	// started in the middle
+	let racers;
+	if (data.midRace) {
+		const startPercent = Math.random() * 0.75;
+		racers = data.cars.map((car, i) => ({
+			userID: `player_${i}`,
+			position: i === 0 ? startPercent : (startPercent + ((Math.random() - 0.5) * 0.1)),
+			disqualified: Math.random() > 0.95
+		}))
+	}
 
 	// load the track instance
 	try {
@@ -66,7 +78,9 @@ export default async function setupAsTrack(target, data) {
 			seed,
 			trackId,
 			variantId,
-			spectator: data.isSpectator
+			spectator: data.isSpectator,
+			raceInProgress: data.midRace,
+			racers
 		});
 	}
 	// failed to create
@@ -76,13 +90,14 @@ export default async function setupAsTrack(target, data) {
 	}
 
 	// include each car, as needed
+	const pattern = LANE_PATTERN[Math.min(4, data.cars.length - 1)]
 	for (let i = 0; i < data.cars.length; i++) {
 		const car = data.cars[i];
 		track.addPlayer({
 			id: `player_${i}`,
 			isPlayer: i === 0,
 			type: car.type,
-			lane: LANE_PATTERN[data.cars.length - 1][i],
+			lane: pattern[i % pattern.length],
 			hue: car.hue,
 			mods: car.mods,
 			isAnimated: true,

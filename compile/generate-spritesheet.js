@@ -10,27 +10,25 @@ import paths from './paths.js'
 import * as cache from './cache.js'
 import { createSpritePaddedSpritesheet } from './create-sprite-padded-spritesheet'
 import crypto from 'crypto';
+import { HASHED_ASSET_TYPES, normalizeAssetTypeName, normalizePublicKeyName } from './consts'
 
 // compression args
 const { jpeg_quality, png_max_palette_colors } = COMPRESSION_PARAMS
 const JPG_COMPRESSION_ARGS = ['-quality', jpeg_quality]
 const PNG_COMPRESSION_ARGS = [png_max_palette_colors, '-f', '--strip', '--skip-if-larger']
 
-export async function generateSpritesheet (spritesheets, nodeId, spritesheetName, subdir, images) {
+export async function generateSpritesheet (spritesheets, nodeId, spritesheetName, subdir, images, isPublic) {
   const { OUTPUT_DIR } = paths
   const src = `${subdir}${spritesheetName || nodeId}`
+  const category = subdir.substr(0, subdir.length - 1)
 
   // check if requires obfuscation
-  let key = src;
-  if (/^(cars|trails|nitros)/.test(src)) {
+  let key = src
+  key = normalizeAssetTypeName(key)
 
-    // need to rename some paths to match
-    // item types in the game
-    key = key.replace(/^trails/, 'trail')
-      .replace(/^nitros/, 'nitro')
-      .replace(/^namecards/, 'namecard')
-
-    // the hashed version
+  // if hashing the type
+  if (HASHED_ASSET_TYPES.includes(category) && !isPublic) {
+    key = normalizePublicKeyName(key)
     key = crypto.createHash('sha1').update(key).digest('hex')
   }
 

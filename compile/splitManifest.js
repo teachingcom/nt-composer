@@ -1,11 +1,10 @@
 import fs from 'fs-extra'
 import path from 'path'
-
-const SECTIONS = ['trails', 'nitros', 'cars', 'namecards']
+import { ASSET_TYPES } from './consts'
 
 export default async function splitManifest ({ manifest, outputDir }) {
   // save each asset type as a separate file
-  for (const type of SECTIONS) {
+  for (const type of ASSET_TYPES) {
     console.log(`[manifest] creating external manifests for ${type}`)
     const dir = path.resolve(outputDir, `./${type}`)
 
@@ -24,7 +23,7 @@ export default async function splitManifest ({ manifest, outputDir }) {
     for (const id in manifest[type]) {
       const obj = manifest[type][id]
 
-      // is standard and shoul be included
+      // is standard and should be included
       // in the default manifest
       if (obj.standard) {
         continue

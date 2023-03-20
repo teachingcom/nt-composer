@@ -73,6 +73,7 @@ export function parse(saveChanges) {
 	const nitros = [ ];
 	const tracks = [ ];
 	const namecards = [ ];
+	const fanfare = [ ];
 	const comps = [ ];
 
 	// misc configs
@@ -126,6 +127,7 @@ export function parse(saveChanges) {
 				tracks.push(path);
 
 				// check for track configs
+				config.midRace = !!~args.indexOf('mid');
 				config.skipRace = !!~args.indexOf('instant');
 				config.slowRace = !!~args.indexOf('slow');
 				config.loseRace = !!~args.indexOf('lose');
@@ -142,11 +144,20 @@ export function parse(saveChanges) {
 				if (car) car.mods.nitro = line.substr('nitros/'.length);
 				else nitros.push(line);
 			}
-
-			// namecards effect
+			// legacy: namecards effect
 			else if (/^namecards/.test(line)) {
 				if (car) car.mods.card = line.substr('namecards/'.length);
 				else namecards.push(line);
+			}
+			// nametags effect
+			else if (/^nametags/.test(line)) {
+				if (car) car.mods.card = line.substr('nametags/'.length);
+				else nametags.push(line);
+			}
+			// fanfare effect
+			else if (/^fanfare/.test(line)) {
+				if (car) car.mods.fanfare = line.substr('fanfare/'.length);
+				else fanfare.push(line);
 			}
 
 			// if there's not any slashes, then it's the
@@ -165,7 +176,7 @@ export function parse(saveChanges) {
 		}
 
 		// return the final object
-		return { seed, cars, tracks, trails, nitros, namecards, comps, ...config };
+		return { seed, cars, tracks, trails, nitros, namecards, fanfare, comps, ...config };
 		
 	}
 	// couldn't parse the data

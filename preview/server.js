@@ -40,7 +40,7 @@ export async function serve(config) {
 	// create the bundler which is just serving
 	// the index html file
 	if (config.dev) {
-		console.log('[mode] using dev mode2');
+		console.log('[server mode] using dev mode');
 		bundler = new Bundler(`${ROOT}/preview/index.html`, {
 			outDir: './.preview/client',
 			sourceMaps: true,

@@ -35,7 +35,7 @@ export default async function generateSoundSprites (root, cache) {
   }
 
   // copy other individual sounds
-  // await copyIndividualSounds(root)
+  await copyIndividualSounds(root)
 }
 
 async function checkForUpdatedSounds(cache) {
@@ -68,7 +68,28 @@ async function copyIndividualSounds(root) {
     const location = path.resolve(collections, name)
     const stat = await fs.stat(location)
     if (stat.isDirectory() && name !== 'collections' && !/^\./.test(name)) {
-      await copyMP3s(root, location);
+      const type = path.basename(location);
+      const output = path.resolve(`${OUTPUT_DIR}/sounds/${type}`)
+
+      // check for mp3s
+      const files = fs.readdirSync(location).filter(item => /\.mp3/i.test(item))
+      for (const file of files) {
+        const sound = file.replace(/\.mp3$/, '');
+        const copyFrom = path.resolve(location, file)
+        const saveTo = path.resolve(output, file)
+        const fileStat = fs.statSync(copyFrom)
+
+        // find the latest timestamp
+        const ts = 0 | fileStat.mtimeMs.toString(16);
+        
+        // mark this as a sound that exists
+        const key = `${name}/${sound}`;
+        root.sounds[key] = ts;
+        
+        // write the file
+        console.log('[sound]', key)
+        copyAndCompressAudio(copyFrom, saveTo)
+      }
     }
   }
 }
@@ -141,10 +162,16 @@ async function generateCollectionSoundSprites(root, name, location) {
 }
 
 // copy and compress each MP3 in a directory
-async function copyMP3s(root, dir) {
+async function copyMP3s(root, dir, { input, output }) {
   const { INPUT_DIR, OUTPUT_DIR } = paths
-  const input = path.resolve(INPUT_DIR, dir)
-  const output = path.resolve(OUTPUT_DIR, dir)
+  
+  if (!input) {
+    input = path.resolve(INPUT_DIR, dir)
+  }
+
+  if (!output) {
+    output = path.resolve(OUTPUT_DIR, dir)
+  }
 
   const entries = await fs.readdir(input)
   for (const entry of entries) {

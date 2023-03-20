@@ -44,6 +44,7 @@ export default async function generateResource (root, node, id, options) {
   // generate the spritesheet, if any
   if (_.some(images)) {
     const { spritesheetName } = options
-    await generateSpritesheet(root.spritesheets, id, spritesheetName, subdir, images)
+    const isPublic = !!data?.public
+    await generateSpritesheet(root.spritesheets, id, spritesheetName, subdir, images, isPublic)
   }
 }
