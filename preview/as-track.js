@@ -93,6 +93,18 @@ export default async function setupAsTrack(target, data) {
 	const pattern = LANE_PATTERN[Math.min(4, data.cars.length - 1)]
 	for (let i = 0; i < data.cars.length; i++) {
 		const car = data.cars[i];
+
+		// check for admin flag
+		// TODO: should this go somewhere else?
+		let isAdmin
+		if (/admin/i.test(car.mods.card)) {
+			isAdmin = true
+			car.mods.card = car.mods.card
+				.replace(/admin/, '')
+				.replace(/ /g, '');
+		}
+
+
 		track.addPlayer({
 			id: `player_${i}`,
 			isPlayer: i === 0,
@@ -103,6 +115,7 @@ export default async function setupAsTrack(target, data) {
 			isAnimated: true,
 			isFriend: Math.random() < 0.5,
 			isGold: Math.random() < 0.5,
+			isAdmin,
 			playerRank: 0 | Math.random() < 2500,
 			playerName: 'Guest Racer',
 			playerTeam: 'NT'
