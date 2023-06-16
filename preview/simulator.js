@@ -108,7 +108,7 @@ export class RaceSimulator {
 		const speeds = [ 5, 4.75, 4.5, 4.25, 4 ];
 		const { track, options } = this;
 		const { players } = track;
-		const { fastRace, slowRace, winRace, loseRace, delayStart = 0 } = options;
+		const { forceNitros, fastRace, slowRace, winRace, loseRace, delayStart = 0 } = options;
 		
 		// track race state
 		const state = { };
@@ -166,6 +166,7 @@ export class RaceSimulator {
 					// check for nitros
 					if (!didNitro
 						&& !fastRace
+						&& !forceNitros
 						&& !player.usedNitro
 						&& Math.random() < (player.progress / 100)) {
 						didNitro = player.usedNitro = true;

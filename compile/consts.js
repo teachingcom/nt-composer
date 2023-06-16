@@ -36,4 +36,5 @@ export function normalizeAssetTypeName(type) {
 export function normalizePublicKeyName(name) {
 	return name.replace(/namecards/, 'nametag')
 		.replace(/nametags/, 'nametag')
+		.replace(/nitros/, 'nitro')
 }

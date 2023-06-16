@@ -41,6 +41,7 @@ export default async function setupAsTrack(target, data) {
 		skipIntro: !!data.skipIntro || !!data.midRace,
 		midRace: !!data.midRace,
 		skipCountdown: !!data.skipCountdown || !!data.midRace,
+		forceNitros: !!data.forceNitros,
 		fastRace: !!data.fastRace,
 		slowRace: !!data.slowRace,
 		skipRace: !!data.skipRace,
@@ -120,6 +121,19 @@ export default async function setupAsTrack(target, data) {
 			playerName: 'Guest Racer',
 			playerTeam: 'NT'
 		});
+	}
+
+	// when testing nitros, force activations on an interval
+	if (data.forceNitros && !window.NITRO_INTERVAL) {
+
+		const nitroDelay = (0 | localStorage.getItem('nitro-delay')) || 5000
+		const triggerNitro = () => {
+			track.track.activateNitro(`player_${0}`);
+			setTimeout(triggerNitro, nitroDelay)
+		};
+
+		// kick off nitros
+		setTimeout(triggerNitro, 2000);
 	}
 
 	// handle track updates

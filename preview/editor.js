@@ -127,6 +127,7 @@ export function parse(saveChanges) {
 				tracks.push(path);
 
 				// check for track configs
+				config.forceNitros = !!~args.indexOf('force-nitros');
 				config.midRace = !!~args.indexOf('mid');
 				config.skipRace = !!~args.indexOf('instant');
 				config.slowRace = !!~args.indexOf('slow');
