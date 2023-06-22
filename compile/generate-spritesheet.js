@@ -100,7 +100,7 @@ export async function generateSpritesheet (spritesheets, nodeId, spritesheetName
   // there seems to be some timing issues - give a moment to
   // settle down before compressing - ideally, we can just
   // pipe results eventually
-  await timeout(500)
+  await timeout(5000)
 
   // verify the resource directory
   const tmpId = _.snakeCase(src)
@@ -126,8 +126,13 @@ export async function generateSpritesheet (spritesheets, nodeId, spritesheetName
 
       // finalize
       async function (error, completed, statistic) {
+        // manual copy (no idea why, but this stopped working at some point)
+        if (completed) {
+          fs.moveSync(statistic.input, statistic.path_out_new, { overwrite: true })
+        }
+
         // remove the temporary generation dir
-        fs.remove(tmpDir)
+        fs.removeSync(tmpDir)
 
         // check for errors
         if (error) {
