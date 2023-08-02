@@ -19,7 +19,8 @@ const PNG_COMPRESSION_ARGS = [png_max_palette_colors, '-f', '--strip', '--skip-i
 
 export async function generateSpritesheet (spritesheets, nodeId, spritesheetName, subdir, images, isPublic) {
   const { OUTPUT_DIR } = paths
-  const src = `${subdir}${spritesheetName || nodeId}`
+  const knownAs = spritesheetName || nodeId;
+  const src = `${subdir}${knownAs}`
   const category = subdir.substr(0, subdir.length - 1)
 
   // check if requires obfuscation
@@ -107,6 +108,19 @@ export async function generateSpritesheet (spritesheets, nodeId, spritesheetName
   const resourceDir = `dist${path.dirname(basePath).substr(OUTPUT_DIR.length)}`
   const tmpDir = `${resourceDir}/_${tmpId}`
   await fs.mkdirp(resourceDir)
+
+  // if the target image doesn't exist, just create something to be a placeholder so the
+  // file size comparison doesn't fail in compressImages
+
+  const verify = [ ];
+  if (hasPngs) verify.push(`${_.snakeCase(knownAs)}.png`);
+  if (hasJpgs) verify.push(`${_.snakeCase(knownAs)}.jpg`);
+  for (const check of verify) {
+    const checkFor = path.resolve(resourceDir, check);
+    if (!fs.existsSync(checkFor)) {
+      fs.writeFileSync(checkFor, '');
+    }
+  }
 
   // compress resources
   return new Promise((resolve, reject) => {

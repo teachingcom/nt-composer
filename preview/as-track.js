@@ -24,7 +24,8 @@ export default async function setupAsTrack(target, data) {
 		manifest,
 		baseUrl: `${window.location.origin}/`,
 		sfx: !data.silent,
-		music: false
+		music: false,
+		transparent: true
 	});
 
 	// for local testing purposes
@@ -83,6 +84,17 @@ export default async function setupAsTrack(target, data) {
 			raceInProgress: data.midRace,
 			racers
 		});
+
+		// check for a background color
+		// normally for extracting sprites
+		if (data.bg) {
+			document.documentElement.style.backgroundColor = data.bg;
+
+			// marvelous
+			track.track.track.overlay.visible = false;
+			track.track.track.ground.visible = false;
+			setInterval(track.track.removeShadows, 1000);
+		}
 	}
 	// failed to create
 	catch (ex) {

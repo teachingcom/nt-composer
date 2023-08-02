@@ -138,6 +138,12 @@ export function parse(saveChanges) {
 				config.skipCountdown = !!~args.indexOf('no-countdown');
 				config.skipIntro = !!~args.indexOf('no-intro');
 				config.silent = !!~args.indexOf('silent');
+
+				// check for a bg
+				const bg = line.match(/bg\:[^ ]+/g)?.[0]
+				if (bg) {
+					config.bg = bg.substring(3)
+				}
 			}
 
 			// nitro effect
@@ -177,7 +183,9 @@ export function parse(saveChanges) {
 		}
 
 		// return the final object
-		return { seed, cars, tracks, trails, nitros, namecards, fanfare, comps, ...config };
+		const data = { seed, cars, tracks, trails, nitros, namecards, fanfare, comps, ...config };
+		console.log('[config]', data);
+		return data;
 		
 	}
 	// couldn't parse the data
