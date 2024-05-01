@@ -11,6 +11,7 @@ import * as cache from './cache.js'
 import { createSpritePaddedSpritesheet } from './create-sprite-padded-spritesheet'
 import crypto from 'crypto';
 import { HASHED_ASSET_TYPES, normalizeAssetTypeName, normalizePublicKeyName } from './consts'
+import { getOverrides } from './overrides.js'
 
 // compression args
 const { jpeg_quality, png_max_palette_colors } = COMPRESSION_PARAMS
@@ -18,6 +19,7 @@ const JPG_COMPRESSION_ARGS = ['-quality', jpeg_quality]
 const PNG_COMPRESSION_ARGS = [png_max_palette_colors, '-f', '--strip', '--skip-if-larger']
 
 export async function generateSpritesheet (spritesheets, nodeId, spritesheetName, subdir, images, isPublic) {
+  const overrides = getOverrides()
   const { OUTPUT_DIR } = paths
   const knownAs = spritesheetName || nodeId;
   const src = `${subdir}${knownAs}`
@@ -77,11 +79,6 @@ export async function generateSpritesheet (spritesheets, nodeId, spritesheetName
     return
   }
 
-  // notify of params
-  console.log(`New Compress Compression Params
-  jpeg_quality           : ${jpeg_quality}
-  png_max_palette_colors : ${png_max_palette_colors}`)
-
   // save the new spritesheet location
   const sprites = spritesheets[key] = { }
   sprites.version = Date.now().toString(16)
@@ -122,6 +119,25 @@ export async function generateSpritesheet (spritesheets, nodeId, spritesheetName
     }
   }
 
+  // track files before removing
+  let count = 0
+  if (hasJpgs) count++
+  if (hasPngs) count++
+
+  // update configs
+  const jpegArgs = [...JPG_COMPRESSION_ARGS]
+  const pngArgs = [...PNG_COMPRESSION_ARGS]
+
+  // check for overrides
+  const compression = overrides[tmpId]
+  jpegArgs[1] = compression?.jpg_quality ?? compression?.jpeg_quality ?? jpegArgs[1]
+  pngArgs[0] = compression?.png_colors ?? pngArgs[0]
+
+  // notify of params
+  console.log(`New Compress Compression Params
+  jpeg_quality           : ${jpegArgs}
+  png_max_palette_colors : ${pngArgs}`)
+
   // compress resources
   return new Promise((resolve, reject) => {
     compressImages(
@@ -133,20 +149,18 @@ export async function generateSpritesheet (spritesheets, nodeId, spritesheetName
         autoupdate: false
       },
       false, // ??
-      { jpg: { engine: 'mozjpeg', command: JPG_COMPRESSION_ARGS } },
-      { png: { engine: 'pngquant', command: PNG_COMPRESSION_ARGS } },
+      { jpg: { engine: 'mozjpeg', command: jpegArgs } },
+      { png: { engine: 'pngquant', command: pngArgs } },
       { svg: { engine: false, command: false } },
       { gif: { engine: false, command: false } },
 
       // finalize
       async function (error, completed, statistic) {
-        // manual copy (no idea why, but this stopped working at some point)
-        if (completed) {
-          fs.moveSync(statistic.input, statistic.path_out_new, { overwrite: true })
-        }
-
+        
         // remove the temporary generation dir
-        fs.removeSync(tmpDir)
+        if (--count <= 0) {
+          fs.removeSync(tmpDir)
+        }
 
         // check for errors
         if (error) {

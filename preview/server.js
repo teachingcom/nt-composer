@@ -144,7 +144,7 @@ async function compileAssets() {
 
 	// wait for the compile
 	try {
-		await compile(CONFIG.input, CONFIG.output);
+		await compile(CONFIG.input, CONFIG.output, CONFIG.overrides);
 		notifyConnections('refresh');
 		console.log('\nAssets compiled\n\n');
 	}

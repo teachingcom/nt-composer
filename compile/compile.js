@@ -11,13 +11,16 @@ import scanDirectory from './scan-directory.js'
 import generateSoundsSpritesheet from './generate-sounds-spritesheet.js'
 import splitManifest from './splitManifest.js'
 import { ASSET_TYPE_SOURCES, normalizeAssetTypeName, normalizePublicKeyName } from './consts.js'
+import { load as loadOverrides } from './overrides.js'
 
 // check if debugging mode should be used
 const DEBUG = !!~process.argv.indexOf('--debug')
 const VERSION = '1.5.2'
 
 /** handles compiling all resources in the repo folder */
-export async function compile (inputDir, outputDir) {
+export async function compile (inputDir, outputDir, overridesPath) {
+  loadOverrides(overridesPath)
+
   // it's somewhat difficult to ensure the composer is
   // the correct version when used from different repos
   // this will make it known which version is being run

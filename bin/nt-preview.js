@@ -9,6 +9,7 @@ try {
 	program
 		.option('-i, --input <dir>', 'Asset resource directory', './resources')
 		.option('-o, --output <dir>', 'The compiled output directory', './dist')
+		.option('-v, --overrides <path>', 'JSON resource of overrides for configurations', '')
 		.option('-d, --dev', 'Dev mode')
 		.option('-p, --port <number>', 'Port number to run the composer preview site', 9999)
 		.parse(process.argv);
@@ -20,9 +21,10 @@ try {
 	else {
 		const input = path.resolve(program.input);
 		const output = path.resolve(program.output);
+		const overrides = path.resolve(program.overrides);
 		const port = 0 | program.port;
 		const dev = !!program.dev;
-		serve({ input, output, port, dev, resources });
+		serve({ input, output, overrides, port, dev, resources });
 	}
 }
 catch (ex) {
