@@ -15,7 +15,7 @@ import { load as loadOverrides } from './overrides.js'
 
 // check if debugging mode should be used
 const DEBUG = !!~process.argv.indexOf('--debug')
-const VERSION = '1.5.2'
+const VERSION = '1.5.6'
 
 /** handles compiling all resources in the repo folder */
 export async function compile (inputDir, outputDir, overridesPath) {
@@ -61,6 +61,7 @@ export async function compile (inputDir, outputDir, overridesPath) {
   await generateResourcesFromDirectory(data, data.cars, 'cars', { })
   await generateResourcesFromDirectory(data, data.nametags, 'nametags', { })
   await generateResourcesFromDirectory(data, data.fanfare, 'fanfare', { })
+  await generateResourcesFromDirectory(data, data.doodads, 'doodads', { })
   await generateResourcesFromDirectory(data, data.extras, 'extras', { })
 
   // tracks have variations so each directory should

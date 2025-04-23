@@ -10,7 +10,7 @@ import paths from './paths.js'
 import * as cache from './cache.js'
 import { createSpritePaddedSpritesheet } from './create-sprite-padded-spritesheet'
 import crypto from 'crypto';
-import { HASHED_ASSET_TYPES, normalizeAssetTypeName, normalizePublicKeyName } from './consts'
+import { HASHED_ASSET_TYPES, normalizeAssetTypeName, normalizePublicKeyName, PLURALIZED_ASSET_TYPE_NAME, SPECIAL_CATEGORIES } from './consts'
 import { getOverrides } from './overrides.js'
 
 // compression args
@@ -33,6 +33,10 @@ export async function generateSpritesheet (spritesheets, nodeId, spritesheetName
   if (HASHED_ASSET_TYPES.includes(category) && !isPublic) {
     key = normalizePublicKeyName(key)
     key = crypto.createHash('sha1').update(key).digest('hex')
+  }
+  // pluralize certain types
+  else if (SPECIAL_CATEGORIES.includes(category)) {
+    key = `${category}/${knownAs}`
   }
 
   // get the possible paths

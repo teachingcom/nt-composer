@@ -161,6 +161,14 @@ export function parse(saveChanges) {
 				if (car) car.mods.card = line.substr('nametags/'.length);
 				else nametags.push(line);
 			}
+			// doodads effect
+			else if (/^doodads/.test(line)) {
+				if (car) {
+					const [key, level = 0] = line.substr('doodads/'.length).split(' ')
+					car.mods.doodad = { key, level: parseInt(level?.toString()) }
+				}
+				else doodads.push(line);
+			}
 			// fanfare effect
 			else if (/^fanfare/.test(line)) {
 				if (car) car.mods.fanfare = line.substr('fanfare/'.length);

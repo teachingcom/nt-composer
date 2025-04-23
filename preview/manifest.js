@@ -34,6 +34,7 @@ export default async function getManifest() {
 	const manifest = await loadJSON('/manifest.json');
 	const mapping = await loadJSON('/mapping.json');
 
+	
 	// replace all mappings as required
 	for (const category in mapping) {
 		for (const hash in mapping[category]) {
