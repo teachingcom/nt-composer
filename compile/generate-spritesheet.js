@@ -2,24 +2,15 @@ import _ from 'lodash'
 import fs from 'fs-extra'
 import path from 'path'
 import Spritesmith from 'spritesmith'
-import compressImages from 'compress-images'
-
-import COMPRESSION_PARAMS from './compression.json'
 import { fileToKey, asyncCallback, timeout } from './utils.js'
 import paths from './paths.js'
 import * as cache from './cache.js'
 import { createSpritePaddedSpritesheet } from './create-sprite-padded-spritesheet'
 import crypto from 'crypto';
 import { HASHED_ASSET_TYPES, normalizeAssetTypeName, normalizePublicKeyName, PLURALIZED_ASSET_TYPE_NAME, SPECIAL_CATEGORIES } from './consts'
-import { getOverrides } from './overrides.js'
 
-// compression args
-const { jpeg_quality, png_max_palette_colors } = COMPRESSION_PARAMS
-const JPG_COMPRESSION_ARGS = ['-quality', jpeg_quality]
-const PNG_COMPRESSION_ARGS = [png_max_palette_colors, '-f', '--strip', '--skip-if-larger']
 
 export async function generateSpritesheet (spritesheets, nodeId, spritesheetName, subdir, images, isPublic) {
-  const overrides = getOverrides()
   const { OUTPUT_DIR } = paths
   const knownAs = spritesheetName || nodeId;
   const src = `${subdir}${knownAs}`
@@ -99,84 +90,8 @@ export async function generateSpritesheet (spritesheets, nodeId, spritesheetName
     await createSpritesheetFromImages(src, sprites, jpgs, jpgPath, true)
   }
 
-  // there seems to be some timing issues - give a moment to
-  // settle down before compressing - ideally, we can just
-  // pipe results eventually
-  await timeout(5000)
-
-  // verify the resource directory
-  const tmpId = _.snakeCase(src)
-  const resourceDir = `dist${path.dirname(basePath).substr(OUTPUT_DIR.length)}`
-  const tmpDir = `${resourceDir}/_${tmpId}`
-  await fs.mkdirp(resourceDir)
-
-  // if the target image doesn't exist, just create something to be a placeholder so the
-  // file size comparison doesn't fail in compressImages
-
-  const verify = [ ];
-  if (hasPngs) verify.push(`${_.snakeCase(knownAs)}.png`);
-  if (hasJpgs) verify.push(`${_.snakeCase(knownAs)}.jpg`);
-  for (const check of verify) {
-    const checkFor = path.resolve(resourceDir, check);
-    if (!fs.existsSync(checkFor)) {
-      fs.writeFileSync(checkFor, '');
-    }
-  }
-
-  // track files before removing
-  let count = 0
-  if (hasJpgs) count++
-  if (hasPngs) count++
-
-  // update configs
-  const jpegArgs = [...JPG_COMPRESSION_ARGS]
-  const pngArgs = [...PNG_COMPRESSION_ARGS]
-
-  // check for overrides
-  const compression = overrides[tmpId]
-  jpegArgs[1] = compression?.jpg_quality ?? compression?.jpeg_quality ?? jpegArgs[1]
-  pngArgs[0] = compression?.png_colors ?? pngArgs[0]
-
-  // notify of params
-  console.log(`New Compress Compression Params
-  jpeg_quality           : ${jpegArgs}
-  png_max_palette_colors : ${pngArgs}`)
-
-  // compress resources
-  return new Promise((resolve, reject) => {
-    compressImages(
-      `${tmpDir}/*.{jpg,png}`, // input
-      `${resourceDir}/`, // output
-      {
-        compress_force: true,
-        statistic: true,
-        autoupdate: false
-      },
-      false, // ??
-      { jpg: { engine: 'mozjpeg', command: jpegArgs } },
-      { png: { engine: 'pngquant', command: pngArgs } },
-      { svg: { engine: false, command: false } },
-      { gif: { engine: false, command: false } },
-
-      // finalize
-      async function (error, completed, statistic) {
-        
-        // remove the temporary generation dir
-        if (--count <= 0) {
-          fs.removeSync(tmpDir)
-        }
-
-        // check for errors
-        if (error) {
-          console.error(`Compression failure for ${resourceDir}`)
-          console.error(error)
-          resolve()
-          // compressed as expected
-        } else {
-          resolve()
-        }
-      })
-  })
+  // Images are now written directly to their final destination
+  // No compression or temporary directory handling needed
 }
 
 // updates the spritesheet with image names
@@ -202,19 +117,16 @@ async function createSpritesheetFromImages (spritesheetId, sprites, images, save
     sprites[name] = [bounds.x, bounds.y, bounds.width, bounds.height, ext]
   }
 
-  // write the image
-  const tmpId = _.snakeCase(spritesheetId)
-  const dir = `${path.dirname(saveTo)}/_${tmpId}`
-  const target = `${dir}/${path.basename(saveTo)}`
-  await fs.mkdirp(dir)
+  // write the image directly to final destination
+  await fs.mkdirp(path.dirname(saveTo))
 
   // create the padded version
   if (useSpriteAsPadding) {
-    await createSpritePaddedSpritesheet(target, properties.width, properties.height, coordinates, padding)
+    await createSpritePaddedSpritesheet(saveTo, properties.width, properties.height, coordinates, padding)
   }
   // use the normal image
   else {
-    await fs.writeFile(target, image, 'binary')
+    await fs.writeFile(saveTo, image, 'binary')
   }
 }
 
