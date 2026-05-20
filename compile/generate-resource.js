@@ -5,6 +5,7 @@ import path from 'path'
 import { getDirectoryContents, readYml, fileToKey } from './utils.js'
 import { generateSpritesheet } from './generate-spritesheet.js'
 import paths from './paths.js'
+import applySources from './applySources.js'
 
 /** generates a resource item */
 export default async function generateResource (root, node, id, options) {
@@ -29,6 +30,7 @@ export default async function generateResource (root, node, id, options) {
   const data = { }
   for (const item of markup) {
     const contents = await readYml(item.path)
+    applySources(contents, contents.sources)
     const key = fileToKey(item.path)
 
     // assign the data -- for a default index file, just assign the data

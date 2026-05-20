@@ -5,7 +5,8 @@ export const ASSET_TYPES = [
 	'cars',
 	'nitros',
 	'fanfare',
-	'doodads'
+	'doodads',
+	'tc'
 ]
 
 export const HASHED_ASSET_TYPES = [
@@ -31,6 +32,7 @@ export const ASSET_TYPE_SOURCES = {
 	nametags: 'nametags', 
 	nitros: 'nitros',
 	doodads: 'doodads',
+	tc: 'tc',
 }
 
 // need to rename some paths to match

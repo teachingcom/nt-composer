@@ -50,6 +50,18 @@ export async function serve(config) {
 	
 	// create the app
 	const app = express();
+
+	// previewer is for local dev — allow any origin to fetch served assets
+	app.use((req, res, next) => {
+		res.setHeader('Access-Control-Allow-Origin', '*');
+		res.setHeader('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS, PUT, POST, DELETE, PATCH');
+		res.setHeader('Access-Control-Allow-Headers', '*');
+		res.setHeader('Access-Control-Expose-Headers', '*');
+		if (req.method === 'OPTIONS') {
+			return res.sendStatus(204);
+		}
+		next();
+	});
 	
 	// communicate for websockets
 	configureWebSockets();

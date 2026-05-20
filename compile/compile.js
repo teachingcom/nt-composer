@@ -10,6 +10,8 @@ import generateResourcesFromDirectory from './generate-resource-from-dir.js'
 import scanDirectory from './scan-directory.js'
 import generateSoundsSpritesheet from './generate-sounds-spritesheet.js'
 import splitManifest from './splitManifest.js'
+import applyMath from './applyMath.js'
+import applySources from './applySources.js'
 import { ASSET_TYPE_SOURCES, normalizeAssetTypeName, normalizePublicKeyName } from './consts.js'
 import { load as loadOverrides } from './overrides.js'
 
@@ -63,6 +65,7 @@ export async function compile (inputDir, outputDir, overridesPath) {
   await generateResourcesFromDirectory(data, data.fanfare, 'fanfare', { })
   await generateResourcesFromDirectory(data, data.doodads, 'doodads', { })
   await generateResourcesFromDirectory(data, data.extras, 'extras', { })
+  await generateResourcesFromDirectory(data, data.tc, 'tc', { })
 
   // tracks have variations so each directory should
   // be scanned to see all available types
@@ -88,18 +91,83 @@ export async function compile (inputDir, outputDir, overridesPath) {
   // to reload with
   data.version = Date.now().toString('16')
 
+  // perform math
+  applyMath(data)
+
   // break up non-required manifest data
   await splitManifest({ manifest: data, outputDir: OUTPUT_DIR })
 
   // create a keymap for local development
-  await generateKeyMap()
+  const keymap = await generateKeyMap()
 
   // save the completed file
-  const output = JSON.stringify(data, null, DEBUG ? 2 : null)
+  const output = JSON.stringify({ ...data, tc: undefined }, null, DEBUG ? 2 : null)
   console.log(`[export] ${exported}`)
   await fs.writeFile(exported, output)
+
+  // create a typing.com manifest
+  await createTypingComManifest(keymap, data)
 }
 
+const TC_MANIFEST_TYPES = ['cars', 'trails', 'tc', 'particles']
+
+/** Unhashes spritesheet keys using the asset mapping. */
+function unhashSpritesheets (manifest, mapping, categories) {
+  manifest.spritesheets = manifest.spritesheets || { }
+
+  for (const category of categories) {
+    const hashes = mapping[category]
+    if (!hashes) continue
+
+    for (const hash in hashes) {
+      const key = hashes[hash]
+      const sheet = manifest.spritesheets[hash] || manifest.spritesheets[`${category}/${key}`]
+      if (!sheet) continue
+
+      delete manifest.spritesheets[hash]
+      manifest.spritesheets[`${category}/${key}`] = sheet
+    }
+  }
+}
+
+/** Keeps spritesheets that belong to typing.com asset categories. */
+function filterSpritesheets (spritesheets, categories) {
+  const filtered = { }
+
+  for (const key in spritesheets) {
+    const [category] = key.split('/')
+    if (categories.includes(category)) {
+      filtered[key] = spritesheets[key]
+    }
+  }
+
+  return filtered
+}
+
+async function createTypingComManifest (keymap, data) {
+  const { OUTPUT_DIR } = paths
+  const mapping = JSON.parse(keymap)
+
+  unhashSpritesheets(data, mapping, TC_MANIFEST_TYPES)
+
+  const result = { }
+  if (data.version != null) result.version = data.version
+
+  const spritesheets = filterSpritesheets(data.spritesheets || { }, TC_MANIFEST_TYPES)
+
+  if (Object.keys(spritesheets).length) {
+    result.spritesheets = spritesheets
+  }
+  
+  for (const type of TC_MANIFEST_TYPES) {
+    if (data[type]) result[type] = data[type]
+  }
+  
+  console.log(result.version)
+  const exported = path.resolve(`${OUTPUT_DIR}/tc-manifest.json`)
+  console.log(`[export] ${exported}`)
+  await fs.writeFile(exported, JSON.stringify(result, null, DEBUG ? 2 : null))
+}
 
 async function generateKeyMap() {
   const { INPUT_DIR, OUTPUT_DIR } = paths
@@ -132,4 +200,6 @@ async function generateKeyMap() {
   const output = path.resolve(`${OUTPUT_DIR}/mapping.json`)
   const data = JSON.stringify(mapping)
   await fs.writeFile(output, data)
+
+  return data
 }
